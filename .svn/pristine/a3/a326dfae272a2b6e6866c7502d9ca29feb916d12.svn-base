@@ -1,0 +1,64 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.rasterdb.service;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.nutz.dao.Dao;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.sql.Sql;
+import org.nutz.dao.sql.SqlCallback;
+import org.nutz.ioc.loader.annotation.Inject; 
+import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.service.IdEntityService;
+import org.rasterdb.service.parma.Warning;
+
+/**
+ *
+ * @author admin
+ */
+@IocBean(fields = {"dao"},name  ="warningService")
+public class WarningService extends IdEntityService{
+    
+    @Inject("dao2")
+    protected Dao dao2;
+    public List<Map> getWarnings()
+    {  
+        
+    String condition= "select t1.Num,t1.Latitude,t4.Status,t1.Longitude,t2.AlertArede,t2.curdata,t4.seconddata from efdevice t1"
+ +" left join efdata_warning  t2 on t2.deviceid=t1.Num"
++" left join (select s1.deviceid,s1.seconddata,s1.status from efdata_today s1 , (select deviceid,max(SendTime)  as MaxDate from efdata_today group by deviceid) s2 "
++" where s1.SendTime=s2.MaxDate and s1.deviceid=s2.deviceid) t4 on t4.deviceid=t1.Num";
+      // String condition="select t1.Num,t1.Latitude,t1.Longitude,t2.AlertArede t2.SecData from efdevice t1,efdata_warning t2 where t1.Num=t2.Num";
+       Sql sqls = Sqls.create(condition);
+        sqls.setCallback(new SqlCallback() {
+            @Override
+            public Object invoke(Connection conn, ResultSet rs, Sql sql) throws SQLException {
+                List<Map> listmap = new ArrayList<Map>();
+
+                while (rs.next()) {
+                    Map map = new HashMap();
+                    map.put("num", rs.getString("Num"));
+                    map.put("Latitude", rs.getString("Latitude"));
+                    map.put("Longitude", rs.getString("Longitude"));
+                    map.put("AlertArede", rs.getString("AlertArede"));
+                    map.put("seconddata", rs.getString("seconddata"));
+                    map.put("curdata", rs.getString("curdata"));
+                    listmap.add(map);
+                }
+                return listmap;
+            }
+        });
+
+        List<Map> listmap = this.dao().execute(sqls).getObject(List.class);
+        return listmap;
+    }
+}

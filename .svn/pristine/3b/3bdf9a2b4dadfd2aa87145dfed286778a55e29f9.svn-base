@@ -1,0 +1,34 @@
+export LIB_HOME=/Users/Administrator/NetBeansProjects/rastermap/lib
+export clpath=$LIB_HOME/ojdbc6.jar:$LIB_HOME/sdoutl.jar:$LIB_HOME/sdoapi.jar
+java -cp $clpath oracle.spatial.util.SampleShapefileToJGeomFeature -h 192.168.1.105 -p 1521 -s orcl -u beidou -d 123456 -t shapes -f /Users/Administrator/shapefiles/states.shp -r 4326 -g the_geom
+
+java -classpath %ORACLE_HOME%\jdbc\lib\ojdbc5.jar;%ORACLE_HOME%\md\jlib\sdoutl.jar;%ORACLE_HOME%\md\jlib\sdoapi.jar oracle.spatial.util.SampleShapefileToJGeomFeature -h gis01 -p 1521 -s orcl -u scott -d <password-for-scott> -t shapes -f shapes.shp -r 8307 -g geom
+
+
+imp system/123456@orcl file=E:\oralce11.1-64bittable.dmp full=y
+//生成缩略图
+gdal_translate -of "JPEG" -outsize 5% 5% pic.tif overview.jpg
+
+gdaltindex -t_srs EPSG:4326  E:\Data\srtm.shp E:\Data\全球strm90\srtm63-72\*.tif
+
+gdaltindex -t_srs EPSG:4326  E:\Data\srtm90.shp E:\Data\全球strm90\*.tif
+
+ogr2ogr -f OCI OCI:beidou/123456@localhost:1521/orcl -lco OVERWRITE=yes -lco DIM=2 -lco GEOMETRY_NAME=the_geom -lco SRID=4326 -overwrite E:\Data\dc\shequ.shp
+
+ogr2ogr -f OCI OCI:beidou/123456@localhost:1521/orcl -lco OVERWRITE=yes -lco DIM=2 -lco GEOMETRY_NAME=the_geom -lco SRID=4326 -overwrite E:\Data\dc\region.shp
+
+ogr2ogr -f OCI OCI:beidou/123456@localhost:1521/orcl -lco OVERWRITE=yes -lco DIM=2 -lco GEOMETRY_NAME=the_geom -lco SRID=4326 -overwrite E:\Data\unistrong\city_dist_area.shp
+ogr2ogr -f OCI OCI:beidou/123456@localhost:1521/orcl -lco OVERWRITE=yes -lco DIM=2 -lco GEOMETRY_NAME=the_geom -lco SRID=4326 -overwrite E:\Data\unistrong\prov_dist_area.shp
+ogr2ogr -f OCI OCI:beidou/123456@localhost:1521/orcl -lco OVERWRITE=yes -lco DIM=2 -lco GEOMETRY_NAME=the_geom -lco SRID=4326 -overwrite E:\Data\unistrong\town_dist_area.shp
+
+
+select "name", sdo_util.TO_WKTGEOMETRY(the_geom) as geo FROM region;
+
+//这里采用sdo_geometry
+select "name", SDO_GEOMETRY.GET_WKT(the_geom) as geo FROM shequ;
+//这里采用st_geometry
+select "name" from region where sdo_relate(the_geom,ST_GEOMETRY.FROM_WKT('point(116.398436 39.944235)',4326),'mask=anyinteract')='TRUE'
+
+sdo_util.FFROM_WKTGEOMETRY('point()')
+
+select s."name"  FROM region r,shequ s where sdo_relate(s.the_geom, r.the_geom,'mask=anyinteract')='TRUE' and s.ogr_fid <5;

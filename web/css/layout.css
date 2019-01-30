@@ -1,0 +1,259 @@
+html,body{
+    height: 100%;
+    width:100%;
+    overflow: hidden;
+    zoom:90%;
+}
+
+#header{
+    top:0;
+    left: 0;
+    height: 80px;
+    width: 100%;
+    position: absolute;
+    z-index: 9;
+
+    /*background: url("../images/banner.png") repeat-x ;*/
+    background: url("../images/x.png") repeat ;
+
+    /*    -webkit-box-shadow: 3px 3px 3px;
+        -moz-box-shadow: 3px 3px 3px;
+        box-shadow: 3px 3px 3px;*/
+}
+
+#utils{
+    float:right;
+    right: 2px;
+}
+
+#tab ul li{
+    float:left;
+    display:inline;
+}
+
+#search{
+    left: 300px;
+    top:30px;
+    position: absolute;
+}
+
+#center{
+    left: 0;
+    top: 80px;
+    width: 100%;
+    height: 800px;
+    position: absolute;
+    z-index: 8;
+}
+
+#map {
+    width: 800px;
+    height: 100%;
+    position: absolute;
+    float: right;
+    left: 260px;
+    z-index: 5;
+    /*background: red;*/
+}
+
+#mapchange {
+    position: absolute;
+    z-index: 1000;
+    left: 80px;
+    top: 50px;
+    width: 68px;
+    height: 44px;
+    background: url("../images/veraster.png") no-repeat scroll 0px 0px transparent;
+    box-shadow: 1px 2px 6px #333;
+    behavior: url(PIE.htc);
+}
+
+#result{
+    height: 100%;
+    width: 100%;
+
+}
+
+#tuli{
+    background: #0095cc;
+    opacity: 0.8;
+}
+#tuli ul{
+    list-style:none;
+}
+#tuli li{
+    /*    padding: 5px;*/
+    margin-left: 5px;
+    float: left;
+    color: white;
+}
+#tuli img{
+    width: 18px;
+    height :36px;
+
+}
+
+
+#left {
+    width: 330px;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 78px;
+    float: left;
+    background: white;
+    z-index: 10;
+    /*    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,.6);
+        -moz-box-shadow: 3px 3px 3px rgba(0,0,0,.6);
+        box-shadow: 3px 3px 3px rgba(0,0,0,.6);*/
+}
+
+#shadow_v{
+    position: relative;
+    /*color: #333;*/
+    /*top: 25px;*/
+    left: 330px;
+    width: 11px;
+    height: 100%;
+    background: url("../images/shad_v.png") repeat-y scroll 0% 0% transparent;
+    z-index: 10;
+}
+#shadow_h{
+    position: relative;
+    /*color: #333;*/
+    top: 78px;
+    left: 1px;
+    width: 100%;
+    height: 11px;
+    background: url("../images/shad_h.png") repeat-x scroll 0% 0% transparent;
+    z-index: 10;
+}
+#toolbar{
+    /*top:73px;*/
+    left: 0;
+    height: 35px;
+    width: 100%;
+    filter: "alpha(opacity=90)"; /* 兼容IE 8 */  
+    filter: alpha(opacity=90);   /* 兼容IE 4-7 */
+    -moz-opacity:0.9;
+    opacity: 0.9;
+    background-color: #f6f6f6;
+    /*    background-color: rgba(241,241,241,1);*/
+    /*border:1px solid #a9c9e2;*/
+    z-index: 900;
+    position: absolute;
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,.6);
+    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,.6);
+    box-shadow: 3px 3px 3px rgba(0,0,0,.6);
+    behavior: url(PIE.htc);
+
+}
+#lefttop{
+    left: 0;
+    height: 35px;
+    width: 100%;
+    filter: "alpha(opacity=90)"; /* 兼容IE 8 */  
+    filter: alpha(opacity=90);   /* 兼容IE 4-7 */
+    -moz-opacity:0.9;
+    opacity: 0.9;
+    /*background-color: rgba(241,241,241,1);*/
+    background-color: #f6f6f6;
+    z-index: 9;
+    position: absolute;
+}
+
+
+
+#other {
+    width: 64px;
+    height: 64px;
+    position: relative;
+    float: left;
+    left:25px;
+    background: rgb(126,98,160);
+    /*background: url("../images/indoor.png") no-repeat scroll 0% 0% transparent;*/
+    z-index: 11;
+}
+
+.time{
+    color: red;
+}
+
+#splitbt{
+    position: absolute;
+    z-index: 100;
+    left: 230px;
+    /*background: black;*/
+    background-image: url("../images/bgs32.png");
+    background-position: -70px -50px;
+    width: 20px;
+    height: 80px;
+    top:50%;
+}
+#rightsplitbt{
+    position: absolute;
+    z-index: 100;
+    right:230px;
+    /*background: black;*/
+    background-image: url("../images/bgs32.png");
+    background-position: -70px -50px;
+    width: 20px;
+    height: 80px;
+    top:50%;
+}
+#admrightsplitbt{
+    position: absolute;
+    display: none;
+    z-index: 100;
+    right:500px;
+    /*background: black;*/
+    background-image: url("../images/bgs32.png");
+    background-position: -70px -50px;
+    width: 20px;
+    height: 80px;
+    top:50%;
+}
+
+/* OpenLayers 的样式覆盖*/
+.ol-zoom{
+    top:.5em;
+    left:0.5em;
+    width: 30px;
+    margin: 1px;
+    /*background: white;*/
+    font-size: 16px;
+    /*    -webkit-box-shadow:1px 1px 1px 1px  rgba(0,0,0,.5);
+        -moz-box-shadow:1px 1px 1px 1px rgba(0,0,0,.5);
+        box-shadow:1px 1px 1px 1px rgba(0,0,0,.5);
+        behavior: url(PIE.htc);  通知IE浏览器调用脚本作用于'box'类 */
+}
+.ol-zoom .ol-zoom-in{
+    /*border-radius:2px 2px 0 0;*/
+    padding:0px;
+    margin: 0px;
+    width: 100%;
+    background: white;
+    color: black;
+    /*box-shadow:1px 1px 1px 1px rgba(0,0,0,.5);*/
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+
+    behavior: url(PIE.htc);  /*通知IE浏览器调用脚本作用于'box'类 */
+}
+.ol-zoom .ol-zoom-in:hover{
+    background: whitesmoke;
+}
+.ol-zoom .ol-zoom-out:hover{
+    background: whitesmoke;
+}
+.ol-zoom .ol-zoom-out{
+    /*border-radius:0 0 2px 2px;*/
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    background: white;
+    color: black;
+    /*box-shadow:1px 1px 1px 1px rgba(0,0,0,.5);*/
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+
+    behavior: url(PIE.htc);  /*通知IE浏览器调用脚本作用于'box'类 */
+}

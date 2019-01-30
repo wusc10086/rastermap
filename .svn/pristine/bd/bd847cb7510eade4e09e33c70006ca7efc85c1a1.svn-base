@@ -1,0 +1,205 @@
+annotation.processing.enabled=true
+annotation.processing.enabled.in.editor=true
+annotation.processing.processors.list=
+annotation.processing.run.all.processors=true
+annotation.processing.source.output=${build.generated.sources.dir}/ap-source-output
+build.classes.dir=${build.web.dir}/WEB-INF/classes
+build.classes.excludes=**/*.java,**/*.form
+build.dir=build
+build.generated.dir=${build.dir}/generated
+build.generated.sources.dir=${build.dir}/generated-sources
+build.test.classes.dir=${build.dir}/test/classes
+build.test.results.dir=${build.dir}/test/results
+build.web.dir=${build.dir}/web
+build.web.excludes=${build.classes.excludes}
+client.urlPart=
+compile.jsps=false
+conf.dir=${source.root}/conf
+debug.classpath=${build.classes.dir}:${javac.classpath}
+debug.test.classpath=\
+    ${run.test.classpath}
+display.browser=true
+# \u8981\u4ece\u5206\u53d1 WAR \u4e2d\u6392\u9664\u7684\u6587\u4ef6
+dist.archive.excludes=
+dist.dir=dist
+dist.ear.war=${dist.dir}/${war.ear.name}
+dist.javadoc.dir=${dist.dir}/javadoc
+dist.war=${dist.dir}/${war.name}
+endorsed.classpath=
+excludes=
+file.reference.common-2.6.0.jar=lib/common-2.6.0.jar
+file.reference.commons-beanutils-1.7.0.jar=lib/commons-beanutils-1.7.0.jar
+file.reference.commons-codec-1.2.jar=lib/commons-codec-1.2.jar
+file.reference.commons-collections-3.1.jar=lib/commons-collections-3.1.jar
+file.reference.commons-collections4-4.1.jar=lib\\commons-collections4-4.1.jar
+file.reference.commons-dbcp-1.4.jar=lib/commons-dbcp-1.4.jar
+file.reference.commons-io-2.5.jar=lib/commons-io-2.5.jar
+file.reference.commons-lang3-3.3.2.jar=lib/commons-lang3-3.3.2.jar
+file.reference.commons-pool-1.5.4.jar=lib\\commons-pool-1.5.4.jar
+file.reference.core.commands-3.6.0.I20100512-1500.jar=lib/core.commands-3.6.0.I20100512-1500.jar
+file.reference.core.runtime-3.6.0.v20100505.jar=lib/core.runtime-3.6.0.v20100505.jar
+file.reference.druid-1.0.5.jar=lib/druid-1.0.5.jar
+file.reference.ecore-2.6.1.jar=lib/ecore-2.6.1.jar
+file.reference.equinox.common-3.6.0.v20100503.jar=lib/equinox.common-3.6.0.v20100503.jar
+file.reference.gt-api-12.1.jar=lib\\gt-api-12.1.jar
+file.reference.gt-cql-12.1.jar=lib\\gt-cql-12.1.jar
+file.reference.gt-data-12.1.jar=lib\\gt-data-12.1.jar
+file.reference.gt-epsg-hsql-12.1.jar=lib\\gt-epsg-hsql-12.1.jar
+file.reference.gt-geotiff-12.1.jar=lib\\gt-geotiff-12.1.jar
+file.reference.gt-image-12.1.jar=lib\\gt-image-12.1.jar
+file.reference.gt-kml-15-SNAPSHOT.jar=lib/gt-kml-15-SNAPSHOT.jar
+file.reference.gt-main-12.1.jar=lib\\gt-main-12.1.jar
+file.reference.gt-metadata-12.1.jar=lib\\gt-metadata-12.1.jar
+file.reference.gt-opengis-12.1.jar=lib\\gt-opengis-12.1.jar
+file.reference.gt-referencing-12.1.jar=lib\\gt-referencing-12.1.jar
+file.reference.gt-render-12.1.jar=lib\\gt-render-12.1.jar
+file.reference.gt-shapefile-12.1.jar=lib\\gt-shapefile-12.1.jar
+file.reference.gt-xsd-core-12.5.jar=lib/gt-xsd-core-12.5.jar
+file.reference.gt-xsd-kml-12.5.jar=lib/gt-xsd-kml-12.5.jar
+file.reference.hamcrest-core-1.3.jar=lib\\hamcrest-core-1.3.jar
+file.reference.hsqldb-2.2.8.jar=lib\\hsqldb-2.2.8.jar
+file.reference.jackson-annotations-2.6.3.jar=lib/jackson-annotations-2.6.3.jar
+file.reference.jackson-core-2.6.3.jar=lib/jackson-core-2.6.3.jar
+file.reference.jackson-databind-2.6.3.jar=lib/jackson-databind-2.6.3.jar
+file.reference.jai_codec-1.1.3.jar=lib\\jai_codec-1.1.3.jar
+file.reference.jai_core-1.1.3.jar=lib\\jai_core-1.1.3.jar
+file.reference.jai_imageio-1.1.jar=lib\\jai_imageio-1.1.jar
+file.reference.JavaAPIforKml.jar=lib/JavaAPIforKml.jar
+file.reference.jgridshift-1.0.jar=lib\\jgridshift-1.0.jar
+file.reference.jsr-275-1.0-beta-2.jar=lib\\jsr-275-1.0-beta-2.jar
+file.reference.jstl-1.2.jar=lib/jstl-1.2.jar
+file.reference.jt-utils-1.3.1.jar=lib\\jt-utils-1.3.1.jar
+file.reference.jt-zonalstats-1.3.1.jar=lib\\jt-zonalstats-1.3.1.jar
+file.reference.jts-1.13.jar=lib/jts-1.13.jar
+file.reference.jts2geojson-0.7.0.jar=lib\\jts2geojson-0.7.0.jar
+file.reference.log4j-1.2.17.jar=lib/log4j-1.2.17.jar
+file.reference.mysql-connector-java-5.1.39-bin.jar=lib/mysql-connector-java-5.1.39-bin.jar
+file.reference.nutz-1.r.55-sources.jar=lib\\nutz-1.r.55-sources.jar
+file.reference.nutz-1.r.55.jar=lib\\nutz-1.r.55.jar
+file.reference.ojdbc6.jar=lib/ojdbc6.jar
+file.reference.picocontainer-1.2.jar=lib/picocontainer-1.2.jar
+file.reference.poi-3.16.jar=lib\\poi-3.16.jar
+file.reference.poi-ooxml-3.16.jar=lib\\poi-ooxml-3.16.jar
+file.reference.poi-ooxml-schemas-3.16.jar=lib\\poi-ooxml-schemas-3.16.jar
+file.reference.postgresql-9.1-903.jdbc4.jar=lib\\postgresql-9.1-903.jdbc4.jar
+file.reference.sdoapi.jar=lib/sdoapi.jar
+file.reference.sdoutl.jar=lib/sdoutl.jar
+file.reference.vecmath-1.3.2.jar=lib\\vecmath-1.3.2.jar
+file.reference.xmlbeans-2.6.0.jar=lib\\xmlbeans-2.6.0.jar
+file.reference.xsd-2.6.0.jar=lib/xsd-2.6.0.jar
+includes=**
+j2ee.compile.on.save=true
+j2ee.copy.static.files.on.save=true
+j2ee.deploy.on.save=true
+j2ee.platform=1.5
+j2ee.platform.classpath=${j2ee.server.home}/lib/annotations-api.jar:${j2ee.server.home}/lib/catalina-ant.jar:${j2ee.server.home}/lib/catalina-ha.jar:${j2ee.server.home}/lib/catalina-storeconfig.jar:${j2ee.server.home}/lib/catalina-tribes.jar:${j2ee.server.home}/lib/catalina.jar:${j2ee.server.home}/lib/ecj-4.4.2.jar:${j2ee.server.home}/lib/el-api.jar:${j2ee.server.home}/lib/jasper-el.jar:${j2ee.server.home}/lib/jasper.jar:${j2ee.server.home}/lib/jsp-api.jar:${j2ee.server.home}/lib/servlet-api.jar:${j2ee.server.home}/lib/tomcat-api.jar:${j2ee.server.home}/lib/tomcat-coyote.jar:${j2ee.server.home}/lib/tomcat-dbcp.jar:${j2ee.server.home}/lib/tomcat-i18n-es.jar:${j2ee.server.home}/lib/tomcat-i18n-fr.jar:${j2ee.server.home}/lib/tomcat-i18n-ja.jar:${j2ee.server.home}/lib/tomcat-jdbc.jar:${j2ee.server.home}/lib/tomcat-jni.jar:${j2ee.server.home}/lib/tomcat-util-scan.jar:${j2ee.server.home}/lib/tomcat-util.jar:${j2ee.server.home}/lib/tomcat-websocket.jar:${j2ee.server.home}/lib/websocket-api.jar
+j2ee.server.type=Tomcat
+jar.compress=false
+javac.classpath=\
+    ${file.reference.log4j-1.2.17.jar}:\
+    ${file.reference.ojdbc6.jar}:\
+    ${file.reference.mysql-connector-java-5.1.39-bin.jar}:\
+    ${file.reference.commons-dbcp-1.4.jar}:\
+    ${file.reference.druid-1.0.5.jar}:\
+    ${file.reference.sdoapi.jar}:\
+    ${file.reference.sdoutl.jar}:\
+    ${file.reference.jts-1.13.jar}:\
+    ${file.reference.jackson-annotations-2.6.3.jar}:\
+    ${file.reference.jackson-core-2.6.3.jar}:\
+    ${file.reference.jackson-databind-2.6.3.jar}:\
+    ${file.reference.jts2geojson-0.7.0.jar}:\
+    ${libs.jpa20-persistence.classpath}:\
+    ${file.reference.nutz-1.r.55-sources.jar}:\
+    ${file.reference.nutz-1.r.55.jar}:\
+    ${file.reference.commons-pool-1.5.4.jar}:\
+    ${file.reference.gt-api-12.1.jar}:\
+    ${file.reference.gt-cql-12.1.jar}:\
+    ${file.reference.gt-data-12.1.jar}:\
+    ${file.reference.gt-epsg-hsql-12.1.jar}:\
+    ${file.reference.gt-main-12.1.jar}:\
+    ${file.reference.gt-metadata-12.1.jar}:\
+    ${file.reference.gt-opengis-12.1.jar}:\
+    ${file.reference.gt-referencing-12.1.jar}:\
+    ${file.reference.gt-render-12.1.jar}:\
+    ${file.reference.gt-shapefile-12.1.jar}:\
+    ${file.reference.hamcrest-core-1.3.jar}:\
+    ${file.reference.hsqldb-2.2.8.jar}:\
+    ${file.reference.jsr-275-1.0-beta-2.jar}:\
+    ${file.reference.jt-utils-1.3.1.jar}:\
+    ${file.reference.jt-zonalstats-1.3.1.jar}:\
+    ${file.reference.jts2geojson-0.7.0.jar}:\
+    ${file.reference.vecmath-1.3.2.jar}:\
+    ${file.reference.gt-geotiff-12.1.jar}:\
+    ${file.reference.gt-image-12.1.jar}:\
+    ${file.reference.jai_codec-1.1.3.jar}:\
+    ${file.reference.jai_core-1.1.3.jar}:\
+    ${file.reference.jai_imageio-1.1.jar}:\
+    ${file.reference.jgridshift-1.0.jar}:\
+    ${file.reference.postgresql-9.1-903.jdbc4.jar}:\
+    ${file.reference.gt-xsd-core-12.5.jar}:\
+    ${file.reference.gt-xsd-kml-12.5.jar}:\
+    ${file.reference.xsd-2.6.0.jar}:\
+    ${file.reference.gt-kml-15-SNAPSHOT.jar}:\
+    ${file.reference.picocontainer-1.2.jar}:\
+    ${file.reference.equinox.common-3.6.0.v20100503.jar}:\
+    ${file.reference.core.commands-3.6.0.I20100512-1500.jar}:\
+    ${file.reference.core.runtime-3.6.0.v20100505.jar}:\
+    ${file.reference.ecore-2.6.1.jar}:\
+    ${file.reference.common-2.6.0.jar}:\
+    ${file.reference.commons-beanutils-1.7.0.jar}:\
+    ${file.reference.commons-codec-1.2.jar}:\
+    ${file.reference.commons-collections-3.1.jar}:\
+    ${file.reference.JavaAPIforKml.jar}:\
+    ${file.reference.commons-lang3-3.3.2.jar}:\
+    ${file.reference.poi-3.16.jar}:\
+    ${file.reference.jstl-1.2.jar}:\
+    ${file.reference.commons-io-2.5.jar}:\
+    ${file.reference.poi-3.16.jar}:\
+    ${file.reference.commons-collections4-4.1.jar}:\
+    ${file.reference.poi-ooxml-3.16.jar}:\
+    ${file.reference.poi-ooxml-schemas-3.16.jar}:\
+    ${file.reference.xmlbeans-2.6.0.jar}
+# Space-separated list of extra javac options
+javac.compilerargs=
+javac.debug=true
+javac.deprecation=false
+javac.processorpath=\
+    ${javac.classpath}
+javac.source=1.6
+javac.target=1.6
+javac.test.classpath=\
+    ${javac.classpath}:\
+    ${build.classes.dir}
+javac.test.processorpath=\
+    ${javac.test.classpath}
+javadoc.additionalparam=
+javadoc.author=false
+javadoc.encoding=${source.encoding}
+javadoc.noindex=false
+javadoc.nonavbar=false
+javadoc.notree=false
+javadoc.preview=true
+javadoc.private=false
+javadoc.splitindex=true
+javadoc.use=true
+javadoc.version=false
+javadoc.windowtitle=
+lib.dir=${web.docbase.dir}/WEB-INF/lib
+persistence.xml.dir=${conf.dir}
+platform.active=default_platform
+resource.dir=setup
+run.test.classpath=\
+    ${javac.test.classpath}:\
+    ${build.test.classes.dir}
+# Space-separated list of JVM arguments used when running a class with a main method or a unit test
+# (you may also define separate properties like run-sys-prop.name=value instead of -Dname=value):
+runmain.jvmargs=
+source.encoding=UTF-8
+source.root=src
+src.dir=${source.root}/java
+test.src.dir=test
+war.content.additional=
+war.ear.name=${war.name}
+war.name=rastermap.war
+web.docbase.dir=web
+webinf.dir=web/WEB-INF

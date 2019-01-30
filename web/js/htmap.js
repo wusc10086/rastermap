@@ -1,0 +1,116 @@
+var yheatmapLayer;
+var datas = [];
+var eleData = {
+    max: 9000,
+    data: datas
+};
+var cfg0_6 = {
+    "radius": 20,
+    "maxOpacity": .5,
+    "scaleRadius": false,
+    "useLocalExtrema": false,
+    latField: 'lat',
+    lngField: 'lng',
+    valueField: 'count'
+};
+var cfg6_10 = {
+    "radius": 0.2,
+    //"radius": 0.02,
+    "maxOpacity": .5,
+    "scaleRadius": true,
+    "useLocalExtrema": false,
+    latField: 'lat',
+    lngField: 'lng',
+    valueField: 'count'
+};
+var cfg10_14 = {
+    //"radius": 0.2,
+    "radius": 0.1,
+    "maxOpacity": .5,
+    "scaleRadius": true,
+    "useLocalExtrema": false,
+    latField: 'lat',
+    lngField: 'lng',
+    valueField: 'count'
+};
+var cfg14_16 = {
+    //"radius": 0.2,
+    "radius": 0.05,
+    "maxOpacity": .5,
+    "scaleRadius": true,
+    "useLocalExtrema": false,
+    latField: 'lat',
+    lngField: 'lng',
+    valueField: 'count'
+};
+var cfg16_18 = {
+    //"radius": 0.2,
+    "radius": 0.025,
+    "maxOpacity": .5,
+    "scaleRadius": true,
+    "useLocalExtrema": false,
+    latField: 'lat',
+    lngField: 'lng',
+    valueField: 'count'
+};
+var cfg18_22 = {
+    // "radius": 0.2,
+    "radius": 0.01,
+    "maxOpacity": .5,
+    "scaleRadius": true,
+    "useLocalExtrema": false,
+    latField: 'lat',
+    lngField: 'lng',
+    valueField: 'count'
+};
+
+/**
+ * 绘制地图热力图
+ * @param {type} zoom
+ * @returns {undefined}
+ */
+function drawHM(zoom) {
+    if (22 > zoom && zoom >= 18) {
+        if (yheatmapLayer) {
+            map.removeLayer(yheatmapLayer);
+        }
+        yheatmapLayer = new HeatmapOverlay(cfg18_22);
+        yheatmapLayer.setData(eleData);
+        map.addLayer(yheatmapLayer);
+    } else if (18 > zoom && zoom >= 16) {
+        if (yheatmapLayer) {
+            map.removeLayer(yheatmapLayer);
+        }
+        yheatmapLayer = new HeatmapOverlay(cfg16_18);
+        yheatmapLayer.setData(eleData);
+        map.addLayer(yheatmapLayer);
+    } else if (16 > zoom && zoom >= 14) {
+        if (yheatmapLayer) {
+            map.removeLayer(yheatmapLayer);
+        }
+        yheatmapLayer = new HeatmapOverlay(cfg14_16);
+        yheatmapLayer.setData(eleData);
+        map.addLayer(yheatmapLayer);
+    } else if (14 > zoom && zoom >= 10) {
+        if (yheatmapLayer) {
+            map.removeLayer(yheatmapLayer);
+        }
+        yheatmapLayer = new HeatmapOverlay(cfg10_14);
+        yheatmapLayer.setData(eleData);
+        map.addLayer(yheatmapLayer);
+    } else if (10 > zoom && zoom >= 6) {
+        if (yheatmapLayer) {
+            map.removeLayer(yheatmapLayer);
+        }
+        yheatmapLayer = new HeatmapOverlay(cfg6_10);
+        yheatmapLayer.setData(eleData);
+        map.addLayer(yheatmapLayer);
+    } else if (6 > zoom && zoom >= 0) {
+        if (yheatmapLayer) {
+            map.removeLayer(yheatmapLayer);
+        }
+        yheatmapLayer = new HeatmapOverlay(cfg0_6);
+        yheatmapLayer.setData(eleData);
+        map.addLayer(yheatmapLayer);
+    }
+}

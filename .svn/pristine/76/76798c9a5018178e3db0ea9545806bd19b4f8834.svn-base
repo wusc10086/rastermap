@@ -1,0 +1,97 @@
+<%-- 
+    Document   : newjsp
+    Created on : 2017-8-6, 23:00:10
+    Author     : Administrator
+--%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="../js/move.js" type="text/javascript"></script>
+        <script src="../js/leaflet/leaflet.js" type="text/javascript"></script>
+        <script src="../js/jquery-1.10.2.js" type="text/javascript"></script>
+        <script src="../js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+        <script src="../js/leaflet/wicket.js" type="text/javascript"></script>
+        <script src="../js/highlight.js" type="text/javascript"></script> 
+        
+        <script src="../js/highlight.js" type="text/javascript"></script> 
+        <script src="../js/jquery.flot.js" type="text/javascript"></script>
+        <script src="../js/echarts.min.js"></script>
+
+        <script src="../js/configure.js" type="text/javascript"></script>
+        <script src="../js/provinceQuery.js" type="text/javascript"></script>
+        <script src="../js/movepanel.js" type="text/javascript"></script>
+        <script src="../js/device.js" type="text/javascript"></script>
+        
+        <link href="../css/highlight.css" rel="stylesheet" type="text/css"/>
+        <link href="../js/leaflet/leaflet.css" rel="stylesheet" type="text/css"/>
+        <link href="../js/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/devicey.css" rel="stylesheet" type="text/css"/>
+        <link href="../js/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <link href="../js/bootstrap/css/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
+        <title></title>
+    </head>
+    <body>
+<!--        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">雷电监测展示系统</a>
+                </div>
+                <div style="float:right;margin-right: 50px">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">设备状态</a></li>
+                        <li><a href="warning.jsp">雷电预警</a></li>
+                        <li><a href="trand.jsp">变化趋势</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>-->
+        <div id="map" class="mainmap" style="margin:0px;width:100%;height: 800px;top:-67px;position: absolute;z-index: 0"></div>
+        <div id="toolbar">
+            <button id="btn-hide-sideright" class="btn-hide" onclick="hideRgihtrtoolbar(this)"></button>
+            <div id="leftPanel" class="panel-panel-primary">
+                <div class="panel--heading" style="background:transparent">
+                    <h4 class="panel--title" style="background:transparent;text-align: center">&nbsp;站&nbsp;点&nbsp;状&nbsp;态</h4 >
+                </div>
+                <div class="panel-body" style="background:transparent">
+                    <ul class="sblegd">
+                        <li ><img src="../images/w3.png" alt="" class="img-sblegd"/>&nbsp;&nbsp;<label id="zczd">&nbsp;&nbsp;0&nbsp;&nbsp;</label>个站点正常</li>
+                        <li ><img src="../images/w4.png" alt="" class="img-sblegd"/>&nbsp;&nbsp;<label id="yczd">&nbsp;&nbsp;0&nbsp;&nbsp;</label>个站点异常</li>
+                        <li ><img src="../images/w1.png" alt="" class="img-sblegd"/>&nbsp;&nbsp;<label id="wsj">&nbsp;&nbsp;0</label>个站点无数据</li>
+                        <li ><img id="yjimg" src="../images/w3.png" alt="" class="img-sblegd"/>&nbsp;&nbsp;<label id="yyjgs">&nbsp;&nbsp;0</label>&nbsp;&nbsp;个站点预警</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+<!--        <div id="showDetatil">
+            <div id="RightPanel" class="panel-panel-primary">
+                <div class="panel--heading" style="background:transparent">
+                    <h3 class="panel--title" style="background:transparent">站&nbsp;点&nbsp;信&nbsp;息</h3>
+                </div>
+                <div class="panel-body" style="background:transparent">
+                    <li ><label>编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</label><label id="zczd"></label></li>
+                    <li ><label>名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称:</label><label id="zczd"></label></li>
+                    <li ><label>经&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度:</label><label id="zczd"></label></li>
+                    <li ><label>纬&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度:</label><label id="zczd"></label></li>
+                    <li ><label>安装时间:</label><label id="zczd"></label></li>
+                    <li ><label>巡检时间:</label><label id="zczd"></label></li>
+                    <li ><label>维修时间:</label><label id="zczd"></label></li>
+                    <li ><label>制&nbsp;&nbsp;造&nbsp;&nbsp;商:</label><label id="zczd"></label></li>                    
+                </div>
+            </div>
+        </div>-->
+        
+        <div id="footer" style="width:100%;margin-bottom: 0px;color: white !important">
+            <button id="btn-hide-footer" class="btn-hide" onclick="hideDownBar(this)" style="top: -20px;" >单站电场曲线图</button>   
+            <div class="deviceselect">
+                <select id="deviceNum" class="" onchange="getDeviceNum(this.options[this.options.selectedIndex].value)">
+                    <option value ="0"></option>
+                </select>
+            </div>
+            <div id="chart">
+            </div>
+
+        </div>
+</html>

@@ -1,0 +1,237 @@
+html,body{
+    height: 100%;
+    width:100%;
+    overflow: hidden;
+
+}
+
+.leaflet-top {
+    top: 60px !important;
+}
+
+#btn-hide-sideleft {
+    position: absolute;
+    width: 14px;
+    height: 52px;
+    left: 0px;
+    top: 45%;
+    background-image: url(../images/btnhide.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #337ab7;
+    border: none;
+}
+#btn-hide-sideright {
+    position: absolute;
+    width: 12px;
+    height: 30px;
+    left: 0px;
+    top: 45%;
+    background-image: url(../images/btnhide_3.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #337ab7;
+    border: 8px;
+    border-radius:  4px;
+
+}
+#toolbar {
+    border-radius: 6px;
+    color: black;
+    position: absolute;
+    box-shadow: 0px 0px 10px #4f76ba;
+    background-color: rgba(187, 185, 219, 0.52);
+    
+    width: 185px;
+    height: 248px;
+    top: 115px;
+    right: 0px;
+}
+#footer{
+    box-shadow: 0px 0px 10px #4f76ba;
+    /*  background-color: rgba(0, 0, 0, 0.52);*/
+    background-color: rgba(187, 185, 219, 0.52);
+    width: 100%;
+    height: 200px;
+    position: fixed;
+    bottom: 0;
+    overflow: visible;
+    border-radius: 10px;
+}
+#btn-hide-footer {
+    position: absolute;
+    height: 20px;
+    left: 0%;
+    z-index:5;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #337ab7;
+    border: none;
+}
+#map{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 0;
+    margin-left: -10px;
+    margin-right: -10px;
+    overflow:hidden;
+}
+#leftPanel{ 
+    height: 100%;
+}
+ul.sblegd {
+    list-style: none;
+    margin-left: -28px;
+    margin-top: -27px;
+    width: 257px;
+    background: transparent;
+}
+img.img-sblegd {
+    width: 20px;
+    height: 30px;
+    float: left;
+}
+ul.sblegd li {
+    list-style: none;
+    margin-left: 0px;
+    margin-top: 18px;
+    width: 131px;
+}
+.deviceselect{
+    z-index: 2;
+    width: 8%;
+    top: 0px;
+    height: 134px;
+    position: relative;
+    overflow: scroll；
+}
+.deviceselects{
+    z-index: 2;
+    width: 8%;
+    top: 60px;
+    height: 134px;
+    position: relative;
+    overflow: scroll；
+}
+#content{
+    left: 0;
+    top: 50px;
+    width: 100%;
+    height: 800px;
+    position: absolute;
+    z-index: 0;
+}
+#footpanel{
+    height: 100%;
+}
+
+div#chart {
+    position: absolute;
+    left: -51px;
+    top: 10px;
+    width: 100%;
+    height: 200px;
+    -moz-user-select: none;
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
+}
+select#deviceNum {
+    background-color: rgba(146, 142, 203,0.12);
+    color: black;
+    position: absolute;
+    top: 8px;
+    left: 600px;
+}
+
+#panel-body-device {
+    width: 100%;
+    height: 100%;
+}
+h3.panel--title {
+    border-bottom: 1px solid rgba(0, 0, 255, 0.6);
+    font-size: 18px;
+    text-align: center;
+    margin-top: 14px;
+}
+
+#showDetatil {
+    border-radius: 6px;
+    color: white;
+    position: absolute;
+    box-shadow: 0px 0px 10px #4f76ba;
+    background-color: rgba(0, 0, 0, 0.52);
+    width: 185px;
+    height: 268px;
+    top: 160px;
+    left: 0px;
+}
+
+.leaflet-div-icon2
+{
+    background-image: url('../js/leaflet/images/w3.png');
+    background-size: 20px 20px;
+    /*border:5px solid rgba(255,255,255,0.5); */
+    color:blue;
+    font-weight:bold;
+    text-align:center;
+    border-radius:50%;
+    line-height:30px;
+    -webkit-animation: twinkling 2s infinite ease-in-out; 
+}
+
+.leaflet-div-blue
+{
+    background-image: url('../images/w4.png');
+    background-size: 20px 20px;
+    /*border:5px solid rgba(255,255,255,0.5); */
+    color:blue;
+    font-weight:bold;
+    text-align:center;
+    border-radius:50%;
+    line-height:30px;
+    /* -webkit-animation: twinkling 1s infinite ease-in-out; */
+}
+.leaflet-div-red{
+    background-image: url('../images/w1.png');
+    background-size: 20px 20px;
+    /*border:5px solid rgba(255,255,255,0.5); */
+    color:blue;
+    font-weight:bold;
+    text-align:center;
+    border-radius:50%;
+    line-height:30px;
+    /* -webkit-animation: twinkling 1s infinite ease-in-out; */
+}
+.leaflet-div-green{
+    background-image: url('../images/w3.png');
+    background-size: 20px 20px;
+    /*border:5px solid rgba(255,255,255,0.5); */
+    color:blue;
+    font-weight:bold;
+    text-align:center;
+    border-radius:50%;
+    line-height:30px;
+    /* -webkit-animation: twinkling 1s infinite ease-in-out; */
+}
+
+@-webkit-keyframes twinkling{
+    0% {
+        opacity: 0; 
+    }
+    100% {
+        opacity: 1; 
+    }
+}
+
+.testicon {
+    -webkit-animation: twinkling 5s infinite ease-in-out; 
+}
+
+.leaflet-top .leaflet-control {
+    margin-top: 16px !important;
+}

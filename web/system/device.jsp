@@ -1,0 +1,66 @@
+<%-- 
+    Document   : device
+    Created on : 2017-7-19, 22:49:14
+    Author     : zhangpan
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>设备状态</title>
+        <link href="../css/device.css" rel="stylesheet" type="text/css" />
+        <link href="../css/highlight.css" rel="stylesheet" type="text/css" />
+        <link href="../css/leaflet.zoomhome.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
+        <link href="../js/leaflet/leaflet.css" rel="stylesheet" type="text/css"/>
+        <script src="../js/jquery-1.10.2.js" type="text/javascript"></script>
+        <script src="../js/leaflet/leaflet.js" type="text/javascript"></script>
+        <script src="../js/leaflet.zoomhome.js" type="text/javascript"></script>
+        <script src="../js/leaflet/wicket.js" type="text/javascript"></script>
+        <script src="../js/highlight.js" type="text/javascript"></script> 
+        <script src="../js/device.js" type="text/javascript"></script> 
+        <script src="../js/jquery.flot.js" type="text/javascript"></script>
+        <script src="../js/echarts.min.js"></script>
+    </head>
+    <script >
+        $(document).ready(function () {
+            initTDTmap();
+            deviceQuery();
+            getEFDataByNum("10002");
+            // drawChart1();
+            setSelectValue();
+            getEFDataByNum();
+            drawChart1();
+
+            window.setInterval(deviceQuery, 60000);
+ 
+        });
+    </script>
+
+    <body  style="overflow-y:hidden">
+        <div class="menu">       
+            <ul>
+                <li><a href="../system/device.jsp"> 设备状态</a></li>
+                <li><a href="../system/warning.jsp">实时预警</a></li>
+                <li><a href="../system/trand.jsp">变化趋势</a></li>
+            </ul> 
+
+        </div>
+        <div class="deviceselect">
+            <select id="deviceNum" onchange="getDeviceNum(this.options[this.options.selectedIndex].value)">
+                <option value ="0"></option>
+            </select>
+        </div>
+        <div class="deviceLegend">
+            <img src="../images/wlegend.png"  alt="图例" style="height: 60px;width: 140px"/>
+        </div>
+        <div id="map" class="mainmap">
+            <div id="chart" class="chart" >
+            </div> 
+        </div>
+
+
+    </body>
+</html>

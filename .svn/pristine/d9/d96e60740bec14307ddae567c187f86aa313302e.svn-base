@@ -1,0 +1,108 @@
+<%-- 
+    Document   : device
+    Created on : 2017-7-19, 22:49:14
+    Author     : admin
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>变化趋势</title>
+        <link href="../css/highlight.css" rel="stylesheet" type="text/css" />
+        <link href="../js/leaflet/leaflet.css" rel="stylesheet" type="text/css"/>
+        <link href="../js/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <script src="../js/jquery-1.10.2.js" type="text/javascript"></script>
+        <script src="../js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+        <script src="../js/leaflet/leaflet.js" type="text/javascript"></script>
+        <script src="../js/leaflet/wicket.js" type="text/javascript"></script>
+        <script src="../js/leaflet/leaflet-div-heatmap.js" type="text/javascript"></script>
+        <script src="../js/highlight.js" type="text/javascript"></script> 
+        <link href="../css/trand.css" rel="stylesheet" type="text/css"/>
+        <script src="../js/heatmap/heatmap.js" type="text/javascript"></script>
+        <script src="../js/heatmap/leaflet-heatmap.js" type="text/javascript"></script>
+        <script src="../js/laydate/laydate.js"></script>
+        <script src="../js/echarts.min.js"></script>
+        <script src="../js/configure.js" type="text/javascript"></script>
+        <script src="../js/provinceQuery.js" type="text/javascript"></script>
+        <script src="../js/htmap.js" type="text/javascript"></script>
+        <script src="../js/trand.js"></script>
+    </head>
+    <script >
+        $(document).ready(function () {
+            initTDTmap();
+            cityQuery();
+        });
+    </script>
+    <body>
+        <!--        <div class="menu">       
+                    <ul>
+                        <li><a href="../system/device.jsp"> 设备状态</a></li>
+                        <li><a href="../system/warning.jsp">实时预警</a></li>
+                        <li><a href="#">变化趋势</a></li>
+                    </ul>            
+                </div>-->
+        <!--        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#">雷电监测展示系统</a>
+                        </div>
+                        <div style="float:right;margin-right: 50px">
+                            <ul class="nav navbar-nav">
+                                <li ><a href="devicey.jsp">设备状态</a></li>
+                                <li><a href="warning.jsp">雷电预警</a></li>
+                                <li class="active"><a href="trand.jsp">变化趋势</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>-->
+        <div id="map" style="z-index:0">  
+
+        </div>
+        <div id="palyDiv">
+            <div id="startDiv" class="startPaly" >
+                开始时间： <input id="startPaly" name="startpaly" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+            </div>
+            <div id="endDiv" class="startPaly" >
+                结束时间:<input id="endPaly" name="endpaly" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+            </div>
+            <div id="playIntDiv" class="startPaly" >
+                数据间隔：<input id="playInt" type="text" > 分钟
+            </div>
+            <div id="intervalDiv" class="startPaly" >
+                播放间隔：<input id="interval" type="text" > 秒
+            </div>
+            <div id="playSButDiv" class="BtnPaly" >
+                <button type="button" onclick="playStart()">开始</button>
+                <button type="button" onclick="playEnd()">结束</button>
+            </div>
+        </div>
+        <!--图例-->
+        <div style="position: absolute;right: 10px;bottom: 30px;z-index:20">
+            <table>
+                <tr>
+                    <td id="level1" style="width:60px;background-color: rgba(237, 242, 236, 0.78);color:#fff;"><500V/M</td>
+                </tr>
+                <tr>
+                    <td id="level2" style="width:60px;background-color: #a6a59c;color:#fff;"><1500V/M</td>
+                </tr>
+                <tr>
+                    <td id="level3" style="width:60px;background-color: #7b3bd9;color:#fff;"><2500V/M</td>
+                </tr>
+                <tr>
+                    <td id="level4" style="width:60px;background-color: #112ed1;color:#fff;">一级预警</td>
+                </tr>
+                <tr>
+                    <td id="level6" style="width:60px;background-color: #e33a4e;color:#fff;">二级预警</td>
+
+                </tr>
+                <tr>
+                    <td id="level5" style="width:60px;background-color: #e0e817;color:#fff;">三级预警</td>
+                </tr>
+                </tr>
+            </table>
+        </div>
+    </body>
+    
+</html>

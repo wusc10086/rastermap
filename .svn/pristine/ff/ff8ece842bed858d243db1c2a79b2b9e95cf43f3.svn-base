@@ -1,0 +1,346 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.rasterdb.service.device;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+
+import org.rasterdb.domain.EFDevice;
+import org.rasterdb.utils.Errors;
+
+/**
+ *
+ * @author Administrator
+ * 电场设备
+ */
+public class Device  implements  Serializable{
+    private static final long serialVersionUID = 1L;
+    
+    public  Device()
+    {}
+    
+
+    private String num;
+
+    private String deviceName;
+
+    private String latitude;
+
+    private String longitude;
+
+    private String elevation;
+
+    private String manufaceture;
+    
+
+    private String installTime;
+
+    private String lastInSpect;
+
+    private String lastRepair;
+
+    private String cityid;
+    
+    private String cityName;
+
+    /**
+     * @return the num
+     */
+    public String getNum() {
+        return num;
+    }
+
+    /**
+     * @param num the num to set
+     */
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    /**
+     * @return the deviceName
+     */
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    /**
+     * @param deviceName the deviceName to set
+     */
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
+    /**
+     * @return the latitude
+     */
+    public String getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * @param latitude the latitude to set
+     */
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    /**
+     * @return the longitude
+     */
+    public String getLongitude() {
+        return longitude;
+    }
+
+    /**
+     * @param longitude the longitude to set
+     */
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    /**
+     * @return the elevation
+     */
+    public String getElevation() {
+        return elevation;
+    }
+
+    /**
+     * @param elevation the elevation to set
+     */
+    public void setElevation(String elevation) {
+        this.elevation = elevation;
+    }
+
+    /**
+     * @return the manufaceture
+     */
+    public String getManufaceture() {
+        return manufaceture;
+    }
+
+    /**
+     * @param manufaceture the manufaceture to set
+     */
+    public void setManufaceture(String manufaceture) {
+        this.manufaceture = manufaceture;
+    }
+
+    /**
+     * @return the installTime
+     */
+    public String getInstallTime() {
+        return installTime;
+    }
+
+    /**
+     * @param installTime the installTime to set
+     */
+    public void setInstallTime(String installTime) {
+        this.installTime = installTime;
+    }
+
+    /**
+     * @return the lastInSpect
+     */
+    public String getLastInSpect() {
+        return lastInSpect;
+    }
+
+    /**
+     * @param lastInSpect the lastInSpect to set
+     */
+    public void setLastInSpect(String lastInSpect) {
+        this.lastInSpect = lastInSpect;
+    }
+
+    /**
+     * @return the lastRepair
+     */
+    public String getLastRepair() {
+        return lastRepair;
+    }
+
+    /**
+     * @param lastRepair the lastRepair to set
+     */
+    public void setLastRepair(String lastRepair) {
+        this.lastRepair = lastRepair;
+    }
+
+    public String getCityid() {
+        return cityid;
+    }
+
+    public void setCityid(String cityid) {
+        this.cityid = cityid;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 47 * hash + (this.num != null ? this.num.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Device other = (Device) obj;
+        if ((this.num == null) ? (other.num != null) : !this.num.equals(other.num)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "EFDevice{" + "num=" + num + ", deviceName=" + deviceName + ", latitude=" + latitude + ", longitude=" + longitude + ", elevation=" + elevation + ", manufaceture=" + manufaceture + ", installTime=" + installTime + ", lastInSpect=" + lastInSpect + ", lastRepair=" + lastRepair + ", cityid=" + cityid + '}';
+    }
+    
+    public static EFDevice toEFDevice(Device device) {
+        EFDevice d = new EFDevice();
+        d.setNum(device.getNum());
+        d.setDeviceName(device.getDeviceName());
+        d.setLatitude(device.getLatitude() == null ? null : new BigDecimal(device.getLatitude()));
+        d.setLongitude(device.getLongitude() == null ? null : new BigDecimal(device.getLongitude()));
+        d.setElevation(device.getElevation() == null ? null : new BigDecimal(device.getElevation()));
+        d.setManufaceture(device.getManufaceture());
+        d.setInstallTime(toDate(device.getInstallTime()));
+        d.setLastInSpect(toDate(device.getLastInSpect()));
+        d.setLastRepair(toDate(device.getLastRepair()));
+        d.setCityid(device.getCityid());
+        return d;
+    }
+    
+    public static Device toDevice(EFDevice device) {
+        Device d = new Device();
+        d.setNum(device.getNum());
+        d.setDeviceName(device.getDeviceName());
+        d.setLatitude(convert(device.getLatitude()));
+        d.setLongitude(convert(device.getLongitude()));
+        d.setElevation(convert(device.getElevation()));
+        d.setManufaceture(device.getManufaceture());
+        d.setInstallTime(convert(device.getInstallTime()));
+        d.setLastInSpect(convert(device.getLastInSpect()));
+        d.setLastRepair(convert(device.getLastRepair()));
+        d.setCityid(device.getCityid());
+        return d;
+    }
+    
+    private static String convert(BigDecimal v) {
+        if (v == null) {
+            return null;
+        }
+        return v.toString();
+    }
+    
+    private static String convert(Date v) {
+        if (v == null) {
+            return null;
+        }
+        
+        try {
+            return DateFormatUtils.format(v, "yyyy-MM-dd");
+        } catch(Exception e) {
+            
+        }
+        return null;
+    }
+    
+    public static void validate(Errors errors, Device device) {
+        String num = device.getNum();
+        if (StringUtils.isBlank(num)) {
+            errors.put("num", "站号不能为空，请输入站号。");
+        }
+        String deviceName = device.getDeviceName();
+        if (StringUtils.isBlank(deviceName)) {
+            errors.put("deviceName", "站名不能为空，请输入站名。");
+        }
+        
+        String latitude = device.getLatitude();
+        Double latitudeD = toDouble(latitude);
+        if (StringUtils.isNotBlank(latitude) 
+                && (latitudeD == null 
+                || latitudeD < 0 || latitudeD >180)) {
+            errors.put("latitude", "纬度值错误，请输入正确的纬度值。");
+        }
+        
+        String longitude = device.getLongitude();
+        Double longitudeD = toDouble(longitude);
+        if (StringUtils.isNotBlank(longitude) 
+                && (longitudeD == null 
+                || longitudeD < 0 || longitudeD >180)) {
+            errors.put("longitude", "经度值错误，请输入正确的经度值。");
+        }
+        
+        String elevation = device.getElevation();
+        Double elevationD = toDouble(elevation);
+        if (StringUtils.isNotBlank(elevation) 
+                && elevationD == null) {
+            errors.put("elevation", "海拔高度值错误，请输入正确的海拔高度值。");
+        }
+        
+        String installTIme = device.getInstallTime();
+        Date installTImeDate = toDate(installTIme);
+        if (StringUtils.isNotBlank(installTIme) && installTImeDate == null) {
+            errors.put("installTIme", "安装时间格式不正确，请重新输入。");
+        }
+        
+        String cityid = device.getCityid();
+        if (StringUtils.isBlank(cityid)) {
+            errors.put("cityid", "请选择设备所属地市。");
+        }
+    }
+    
+    private static Double toDouble(String s) {
+        if (StringUtils.isBlank(s)) {
+            return null;
+        }
+        try{
+            return Double.parseDouble(s.trim());
+        }catch(Exception e) {
+            return null;
+        }
+    }
+    
+    private static Date toDate(String s) {
+        if (StringUtils.isBlank(s)) {
+            return null;
+        }
+        
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date d = df.parse(s);
+            return new Date(d.getTime());
+        } catch (ParseException ex) {
+            return null;
+        }
+    }
+}

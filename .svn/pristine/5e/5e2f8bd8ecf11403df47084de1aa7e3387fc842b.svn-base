@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/java/org/rasterdb/filters/UserFilter.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>30</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>jar:file:/C:/Users/hongxin/Desktop/hy/rasterMap2.0/rastermap1.0.0/lib/nutz-1.r.55-sources.jar!/org/nutz/dao/impl/sql/NutSql.java</file>
+            <file>file:/C:/Users/hongxin/Desktop/hy/rasterMap2.0/rastermap1.0.0/web/js/device.js</file>
+            <file>file:/C:/Users/hongxin/Desktop/hy/rasterMap2.0/rastermap1.0.0/src/java/org/rasterdb/service/EFDataService.java</file>
+            <file>file:/C:/Users/hongxin/Desktop/hy/rasterMap2.0/rastermap1.0.0/src/java/org/rasterdb/service/DeviceService.java</file>
+            <file>file:/C:/Users/hongxin/Desktop/hy/rasterMap2.0/rastermap1.0.0/src/java/org/rasterdb/modules/EFDataModule.java</file>
+            <file>file:/C:/Users/hongxin/Desktop/hy/rasterMap2.0/rastermap1.0.0/src/java/org/rasterdb/modules/MapProductinfoMudule.java</file>
+            <file>jar:file:/C:/Users/hongxin/Desktop/hy/rasterMap2.0/rastermap1.0.0/lib/nutz-1.r.55-sources.jar!/org/nutz/mvc/impl/processor/MethodInvokeProcessor.java</file>
+        </group>
+    </open-files>
+</project-private>

@@ -1,0 +1,464 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.rasterdb.modules;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.ViewModel;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.Param;
+import org.rasterdb.domain.Count;
+import org.rasterdb.domain.EFData;
+import org.rasterdb.domain.EFDataWarning;
+import org.rasterdb.domain.EFDevice;
+import static org.rasterdb.modules.DeviceManagerModule.LOG;
+import org.rasterdb.service.EFDataService;
+import org.rasterdb.service.dataplayback.DataExporter;
+import org.rasterdb.service.dataplayback.HisDataQueryForm;
+import org.rasterdb.service.device.DeviceManagerService;
+import org.rasterdb.service.device.DeviceQueryForm;
+import org.rasterdb.utils.HYPager;
+import org.rasterdb.utils.ProjectInfo;
+import org.rasterdb.utils.Resp;
+import org.rasterdb.utils.Utils;
+
+/**
+ *
+ * @author zhang
+ */
+@IocBean
+@At("efdata")
+@Ok("json")
+public class EFDataModule {
+    
+    static Logger LOG = LogManager.getLogger(EFDataModule.class);
+    
+    private static final int DEFAULT_SHOW_PAGE_COUNT = HYPager.DEFAULT_SHOW_PAGE_COUNT;
+    
+    private static final int DEFAULT_PAGE_SIZE = 15;
+    
+    @Inject
+    public EFDataService efDataService;
+    
+    @Inject()
+    private DeviceManagerService deviceManagerService;
+    
+    @Inject
+    private ProjectInfo projectInfo;
+    
+    @At("/getefdatabynum/?")
+    public List<EFData> getEFDatasByNum(String num) {
+        
+        return efDataService.getEFDataByNum(num);
+    }
+    
+    @Ok("json")
+    @At("/getefdatabynumNext/?")
+    public List<EFData> getEFDatasByNumNext(String num) {
+        List<EFData> ll = efDataService.getEFDatasByNumNext(num);
+        System.out.println(ll.size());
+        return ll;
+    }
+
+    /**
+     * 跳转历史查询页面 电场强度
+     *
+     * @param model
+     * @return
+     */
+    @At("/historyefdata")
+    @Ok("re")
+    public String historyEfdataInit(ViewModel model) {
+        List<EFDevice> allDevices = deviceManagerService.allDevices();
+        model.put("allDevices", allDevices);
+        model.put("allDevicesSize", allDevices == null ? 0 : allDevices.size());
+        model.put("yesterday", DateFormatUtils.format(new Date(System.currentTimeMillis() - 24 * 3600 * 1000L), "yyyy-MM-dd HH:mm"));
+        model.put("now", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm"));
+        return "jsp:/data-playback/historyefdata.jsp";
+    }
+
+    /**
+     * 跳转历史查询页面 电场强度
+     *
+     * @param model
+     * @return
+     */
+    @At("/dataStatistics")
+    @Ok("re")
+    public String dataStatisticsInit(ViewModel model) {
+        List<EFDevice> allDevices = deviceManagerService.allDevices();
+        model.put("allDevices", allDevices);
+        model.put("allDevicesSize", allDevices == null ? 0 : allDevices.size());
+        model.put("yesterday", DateFormatUtils.format(new Date(System.currentTimeMillis() - 24 * 3600 * 1000L), "yyyy-MM-dd HH:mm"));
+        model.put("now", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm"));
+        return "jsp:/system/dataStatistics.jsp";
+    }
+
+    /**
+     * 分页查询，返回列表页面 电场强度／预警信息
+     *
+     * @param queryForm
+     * @param pageNo
+     * @param mv
+     * @return
+     */
+    @At("/historyefdata-table")
+    @Ok("re")
+    @Filters()
+    public String getListEfdata(@Param("..") HisDataQueryForm queryForm,
+            @Param("pageNo") String pageNo, @Param("totalCount") String totalCount, ViewModel model) {
+        HYPager<HisDataQueryForm> pager = new HYPager<HisDataQueryForm>();
+        pager.setShowPageCount(DEFAULT_SHOW_PAGE_COUNT);
+        pager.setPageSize(DEFAULT_PAGE_SIZE);
+        pager.setQueryForm(queryForm);
+        
+        int pageNoInt = NumberUtils.toInt(pageNo, -1);
+        pager.setPageNumber((pageNoInt <= 1 ? 1 : pageNoInt));
+        int totalCountInt = NumberUtils.toInt(totalCount, -1);
+        pager.setTotalCount(totalCountInt);
+        
+        String dataType = queryForm.getDataType();
+        if ("1".equals(dataType)) {//“１”代表电场强度
+            //List<EFData> efDataList = efDataService.getListData(queryForm);
+            List<EFData> efDataList = efDataService.getEFDatasWithPager(pager);
+            model.put("efDataList", efDataList);
+            model.put("pager", pager);
+            return "jsp:/data-playback/historyefdata-efdata-table.jsp";
+        } else {//代表预警信息
+            List<EFDataWarning> efDataWarningList = efDataService.getListData(pager);
+            model.put("efDataWarningList", efDataWarningList);
+            model.put("pager", pager);
+            return "jsp:/data-playback/historyefdata-warning-table.jsp";
+        }
+    }
+
+    /**
+     * 导出 电场强度
+     *
+     * @param queryForm
+     * @param EXPORT
+     * @param mv
+     * @return
+     */
+    @At("/exportEFDatas")
+    public void export(@Param("..") HisDataQueryForm queryForm,
+            HttpServletRequest request, HttpServletResponse response) {
+        DataExporter exporter = new DataExporter(projectInfo);
+        File tmpDir = exporter.getTmpDir();
+        
+        if (tmpDir == null) {
+            
+        } else {
+            /*
+            // 查询数据
+            List<EFData> ListEFDatas = efDataService.getListData(queryForm);
+
+            // 将数据导出到临时文件里
+            List<DataExporter.EFData> exporterEFDatas = null;
+            for (DataExporter.EFData efData : exporterEFDatas) {
+                exporter.export(tmpDir, efData);
+            }
+             */
+            
+            efDataService.getEFDatasForExport(queryForm, tmpDir, exporter);
+            
+            exporter.close();
+
+            // 输出到浏览器
+            InputStream in = null;
+            try {
+                File tmpExcelFile = exporter.getTmpExcelFile();
+                in = new FileInputStream(tmpExcelFile);
+                response.reset();
+                response.setContentType("application/vnd.ms-excel");
+                response.setHeader("Content-Disposition", "attachment; filename=" + tmpExcelFile.getName() + "");
+                ServletOutputStream out = response.getOutputStream();
+                IOUtils.copy(in, out);
+                out.flush();
+            } catch (IOException ex) {
+                LOG.error("下载设备的excel文件错误。", ex);
+            } finally {
+                if (in != null) {
+                    IOUtils.closeQuietly(in);
+                }
+            }
+        }
+        
+    }
+
+    /**
+     * hightchar 图表 电场强度/预警信息
+     *
+     * @param queryForm
+     * @param
+     * @param Collection
+     * @return
+     */
+    @At("/getefdatas")
+    @Filters()
+    public Resp getEFDatas(@Param("..") HisDataQueryForm queryForm) {
+        Resp resp = new Resp();
+        Map<String, DeviceSimpleDatas> deviceSimpleDatasListMap = new HashMap<String, DeviceSimpleDatas>();
+        String starTimeStr = queryForm.getStartTime();
+        String endTimeStr = queryForm.getEndTime();
+        if (StringUtils.isBlank(starTimeStr)) {
+            resp.addMessage("开始时间不为空!");
+        }
+        if (StringUtils.isBlank(endTimeStr)) {
+            resp.addMessage("终止时间不为空!");
+        }
+        Timestamp startTime = Utils.toTimestamp(starTimeStr);
+        Timestamp endTime = Utils.toTimestamp(endTimeStr);
+        Date start = new Date(startTime.getTime());        
+        Date end = new Date(endTime.getTime());        
+        long second = start.getTime() - end.getTime();
+         long time = end.getTime() - start.getTime();
+        if (second < 0) {
+            if(time <  86400000 * 7 * 2 ){
+                if (queryForm.getDataType().equals("1")) {
+                List<EFData> efdatas = efDataService.getEFDatas(queryForm);
+                String deviceId = null;
+                for (EFData d : efdatas) {
+                    deviceId = d.getDeviceid();
+                    DeviceSimpleDatas datas = deviceSimpleDatasListMap.get(deviceId);
+                    if (datas == null) {
+                        datas = new DeviceSimpleDatas();
+                        datas.setDeviceId(deviceId);
+                        deviceSimpleDatasListMap.put(deviceId, datas);
+                    }
+                    datas.addEFData(d);
+                }
+            } else {
+                List<EFDataWarning> efdatasWarning = efDataService.getEFDatasWarning(queryForm);
+                String deviceId = null;
+                for (EFDataWarning d : efdatasWarning) {
+                    deviceId = d.getDeviceid();
+                    DeviceSimpleDatas datas = deviceSimpleDatasListMap.get(deviceId);
+                    if (datas == null) {
+                        datas = new DeviceSimpleDatas();
+                        datas.setDeviceId(deviceId);
+                        deviceSimpleDatasListMap.put(deviceId, datas);
+                    }
+                    datas.addWarning(d);
+                }
+            }
+            
+            resp.setData(deviceSimpleDatasListMap.values());
+            resp.setCode(queryForm.getDataType());
+            }else{
+               resp.addMessage("间隔不能大于两个星期！"); 
+            }
+            
+        } else {
+            resp.addMessage("起始时间不能大于终止时间!");
+        }
+        
+        return resp;
+        
+    }
+
+    /**
+     * hightchar 数据到报率/可用性
+     *
+     * @param queryForm
+     * @param
+     * @param Collection
+     * @return
+     */
+    @At("/getefdataCount")
+    @Filters()
+    public Resp getEFDataCount(@Param("deviceids") String deviceidstr, @Param("..") HisDataQueryForm queryForm) {
+        Resp resp = new Resp();
+        Map<String, DeviceSimpleDatas> deviceSimpleDatasListMap = new HashMap<String, DeviceSimpleDatas>();
+        String starTimeStr = queryForm.getStartTime();
+        String endTimeStr = queryForm.getEndTime();
+        if (StringUtils.isBlank(starTimeStr)) {
+            resp.addMessage("开始时间不为空");
+        }
+        if (StringUtils.isBlank(endTimeStr)) {
+            resp.addMessage("终止时间不为空");
+        }
+        
+        Timestamp startTime = Utils.toTimestamp(starTimeStr);
+        Timestamp endTime = Utils.toTimestamp(endTimeStr);
+        Date start = new Date(startTime.getTime());
+        Date end = new Date(endTime.getTime());
+        long ms =  end.getTime()-start.getTime();
+        if (ms <= 0) {
+            resp.addMessage("起始时间不能大于终止时间！");
+            return resp;
+        }
+            if (queryForm.getDataType().equals("1")) {//可用性
+                List<EFData> efdatas = efDataService.getEFDatas(queryForm);
+                String deviceId = null;
+                for (EFData d : efdatas) {
+                    deviceId = d.getDeviceid();
+                    DeviceSimpleDatas datas = deviceSimpleDatasListMap.get(deviceId);
+                    if (datas == null) {
+                        datas = new DeviceSimpleDatas();
+                        datas.setDeviceId(deviceId);
+                        deviceSimpleDatasListMap.put(deviceId, datas);
+                    }
+                    datas.addEFDataStatus(d);
+                }
+                resp.setData(deviceSimpleDatasListMap.values());
+            } else {
+                //数据到报率
+                long minutes = ms / (1000 * 60);
+                List<Count> countList = efDataService.getEFDatasCount(queryForm);
+                List<EFDevice> allDevices=deviceManagerService.allDevices();//查询设备表
+                for (Count count : countList) {
+                    for(EFDevice device:allDevices)
+                     {
+                         if (device.getNum().equals(count.getDeviceid())) {
+                             count.setDeviceName(device.getDeviceName());
+                             break;
+                         }
+                     }
+                }
+                
+                for(Count counts : countList)
+                {
+                    DecimalFormat df = new DecimalFormat("#0.00");
+                    String ratios= df.format(counts.getCount()/(double)minutes * 100);
+                    Double d = Double.parseDouble(ratios);
+                    counts.setRatio(d);
+                }
+                
+                resp.setData(countList);
+                
+            }
+            resp.setCode(queryForm.getDataType());
+            return resp;
+    }
+       
+       
+    
+
+    /*
+     * 内部类 hightchars
+     */
+    private static class SimpleData {
+        
+        private String sendTime;
+        private Double value;
+        
+        public SimpleData() {
+        }
+        
+        public SimpleData(String sendTime, Double value) {
+            this.sendTime = sendTime;
+            this.value = value;
+        }
+        
+        public String getSendTime() {
+            return sendTime;
+        }
+        
+        public void setSendTime(String sendTime) {
+            this.sendTime = sendTime;
+        }
+        
+        public Double getValue() {
+            return value;
+        }
+        
+        public void setValue(Double value) {
+            this.value = value;
+        }
+        
+        @Override
+        public String toString() {
+            return "SimpleData{" + "sendTime=" + sendTime + ", value=" + value + '}';
+        }
+        
+    }
+    
+    private static class DeviceSimpleDatas {
+        
+        private String deviceId;
+        private String deviceName;
+        private List<SimpleData> datas = new ArrayList<SimpleData>();
+        
+        public String getDeviceId() {
+            return deviceId;
+        }
+        
+        public void setDeviceId(String deviceId) {
+            this.deviceId = deviceId;
+        }
+        
+        public String getDeviceName() {
+            return deviceName;
+        }
+        
+        public void setDeviceName(String deviceName) {
+            this.deviceName = deviceName;
+        }
+        
+        public List<SimpleData> getDatas() {
+            return datas;
+        }
+        
+        public void setDatas(List<SimpleData> datas) {
+            this.datas = datas;
+        }
+        
+        public void addEFData(EFData d) {
+            SimpleData SimpleData = new SimpleData(DateFormatUtils.format(d.getSendTime(), "yyyy-MM-dd HH:mm:ss"),
+                    (NumberUtils.toDouble(d.getAverage(), 0)) / 100);
+            datas.add(SimpleData);
+        }
+        
+        public void addWarning(EFDataWarning d) {
+            SimpleData SimpleData = new SimpleData(DateFormatUtils.format(d.getSendTime(), "yyyy-MM-dd HH:mm:ss"),
+                    NumberUtils.toDouble(d.getAlertArede(), 0));
+            datas.add(SimpleData);
+        }
+        
+        public void addEFDataStatus(EFData d) {
+            SimpleData SimpleData = new SimpleData(DateFormatUtils.format(d.getSendTime(), "yyyy-MM-dd HH:mm:ss"),
+                    NumberUtils.toDouble(d.getStatus(), 0));
+            datas.add(SimpleData);
+        }
+        
+        @Override
+        public String toString() {
+            return "DeviceSimpleDatas{" + "deviceId=" + deviceId + ", deviceName=" + deviceName + ", datas=" + datas + '}';
+        }
+
+       
+    }
+    
+}

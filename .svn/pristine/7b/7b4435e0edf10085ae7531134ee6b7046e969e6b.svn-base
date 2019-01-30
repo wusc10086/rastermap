@@ -1,0 +1,121 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2017-8-4, 11:40:34
+    Author     : wuyiwei
+*/
+
+         .page-title-breadcrumb {
+            padding: 5px 0;
+             height: 40px;
+             width:100%;
+            background: url(../images/test1.png) repeat-x;
+        }
+        .title {
+            padding: 10px 20px; margin: 0 0 5px 0; color: #111111;
+        }
+        #dataTable {
+            margin: 2px 4px 4px 4px;
+            padding: 2px;
+            text-align:center;
+        }
+        #dataTable thead td {
+            font-weight: bolder;
+        }
+        #pager {
+            /* width: 400px;*/
+            margin-top:0; marging-bottom:0; 
+        }
+        .del {
+            font-style: italic;
+            text-decoration:line-through;
+            color: #dd2222;
+        }
+        #dataTable tbody>tr:hover {
+            background-color: #fabc4c;
+        }
+        #dataTable tbody>tr:nth-child(odd):hover {
+            background-color: #fabc4c;
+        }
+        
+        
+        #form {
+            margin-top: 6px;
+        }
+        .field-error {
+            border-color: #ee1111;
+        }
+        .field-error+span {
+            color: #ee1111;
+        }
+
+        .error-box {
+            margin: 5px 0 10px 0;
+            color: #ee1111;
+        }
+        
+        .circle-box {
+            list-style-type:none;
+            display:inline-block;
+            margin-bottom: 0; 
+            padding: 6px;
+        }
+        .circle-green {
+            width: 20px;
+            height: 20px;
+            background: green;
+            color: green;
+            -moz-border-radius: 15px;
+            -webkit-border-radius: 15px;
+            border-radius: 15px;
+            display:inline-block;
+            vertical-align: middle;
+        }
+        .circle-blue {
+            width: 20px;
+            height: 20px;
+            background: blue;
+            color: blue;
+            -moz-border-radius: 15px;
+            -webkit-border-radius: 15px;
+            border-radius: 15px;
+            display:inline-block;
+            vertical-align: middle;
+        }
+        .circle-red {
+            border:1px solid red;
+            width: 20px;
+            height: 20px;
+            background: red;
+            color: red;
+            -moz-border-radius: 15px;
+            -webkit-border-radius: 15px;
+            border-radius: 15px;
+            display:inline-block;
+            vertical-align: middle;
+        }
+        .circle-gray {
+            width: 20px;
+            height: 20px;
+            background: #e3e3e3;
+            color: #e3e3e3;
+            -moz-border-radius: 15px;
+            -webkit-border-radius: 15px;
+            border-radius: 15px;
+            display:inline-block;
+            vertical-align: middle;
+        }
+        .circle-yellow {
+            width: 20px;
+            height: 20px;
+            background: yellow;
+            color: black;
+            -moz-border-radius: 15px;
+            -webkit-border-radius: 15px;
+            border-radius: 15px;
+            display:inline-block;
+            vertical-align: middle;
+        }

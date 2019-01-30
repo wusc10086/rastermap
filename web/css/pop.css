@@ -1,0 +1,23 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2016-9-22, 18:37:42
+    Author     : yangzz
+*/
+
+#pop{position:absolute;z-index: 10;background:#fff;width:500px;height:800px;border:1px solid #e0e0e0;font-size:12px;position: fixed;right:10px;bottom:20px;overflow: hidden;}
+#popHead{line-height:32px;background:#f6f0f3;border-bottom:1px solid #e0e0e0;position:relative;font-size:12px;padding:0 0 0 10px;overflow: hidden;}
+#popHead h2{font-size:20px;color:#666;line-height:32px;height:32px;margin-top:7px;overflow: hidden;}
+#popHead #popClose{position:absolute;right:10px;top:1px;overflow: hidden;}
+#popHead a#popClose:hover{color:#f00;cursor:pointer;overflow: hidden;}
+#popContent{padding:0px0px;overflow: hidden;}
+#popTitle{margin: auto;text-align: center;}
+#popTitle a{line-height:20px;font-size:18px;font-family:'微软雅黑';color:#333;font-weight:bold;text-decoration:none;}
+#popTitle a:hover{color:#f60;}
+#popIntro{text-indent:0px;line-height:160%;margin:0px 0;color:#666;}
+#popMore{text-align:right;border-top:1px dotted #ccc;line-height:24px;margin:8px 0 0 0;}
+#popMore a{color:#f60;}
+#popMore a:hover{color:#f00;}

@@ -1,0 +1,477 @@
+<%-- 
+    Document   : historyefdata
+    Created on : 2017-8-4, 11:37:12
+    Author     : zhang
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.util.*" %>
+<%@ page import="org.rasterdb.domain.*" %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>数据统计</title>
+
+        <script src="<%=request.getContextPath()%>/js/jquery-1.10.2.js" type="text/javascript"></script>
+        <script src="<%=request.getContextPath()%>/js/highchart/highcharts.js" type="text/javascript"></script>
+        <script src="<%=request.getContextPath()%>/js/highchart/exporting.js" type="text/javascript"></script>
+        <script src="<%=request.getContextPath()%>/js/highchart/highcharts-zh_CN.js" type="text/javascript"></script>
+        <script src="<c:url value='/js/bootstrap/bootstrap.min.js'/>"></script>
+        <link rel="stylesheet" href="<c:url value='/js/bootstrap/css/bootstrap.min.css'/>"/>
+        <link rel="stylesheet" href="<c:url value='/css/common.css'/>"/>
+        <link rel="stylesheet" href="<c:url value='/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'/>">
+        <script src="<c:url value='/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js'/>" type="text/javascript"></script>
+        <script src="<c:url value='/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js'/>" type="text/javascript" charset="UTF-8"></script>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/js/bootstrap/bootstrap-multiselect.js"></script>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/js/bootstrap/css/bootstrap-multiselect.css" type="text/css"/>
+        <style>
+            ul.deviceIds-list {
+                list-style-type:none;
+                display:inline-block;
+                vertical-align: middle;
+                margin-bottom: 0;
+                margin-left: -35px;
+            }
+            ul.deviceIds-list li{
+                display: inline-block;
+
+            }
+            ul.deviceIds-list li label{
+                margin-right: 10px;
+            }
+            table.deviceIds-list select {
+                width: 200px;
+            }
+            .query-row {
+                height: 45px;
+            }
+            .query-row form{
+                height: 45px;
+            }
+            .selectrow {
+               height: 150px; 
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <h4 class="title">历史数据查询</h4>
+            </div>
+            <div class="row query-row" style="height: 45px;">
+                <div class="col-md-3">
+                    <form action="" class="form-horizontal"  role="form">
+                        <div class="form-group">
+                            <label for="startTime" class="col-md-4 control-label">开始时间</label>
+                            <div class="input-group date form_datetime col-md-8" data-date-format="yyyy-mm-dd hh:ii" data-link-field="startTime">
+                                <input class="form-control" size="16" type="text" value="${obj.yesterday}" readonly>
+                                <%-- <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> --%>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            </div>
+                            <input type="hidden" id="startTime" value="${obj.yesterday}" /><br/>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-3">
+                    <form action="" class="form-horizontal"  role="form">
+                        <div class="form-group">
+                            <label for="endTime" class="col-md-4 control-label">结束时间</label>
+                            <div class="input-group date form_datetime col-md-8" data-date-format="yyyy-mm-dd hh:ii" data-link-field="endTime">
+                                <input class="form-control" size="16" type="text" value="${obj.now}" readonly>
+                                <%-- <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> --%>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            </div>
+                            <input type="hidden" id="endTime" value="${obj.now}" /><br/>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-3">
+                    <form action="" class="form-horizontal"  role="form">
+                        <div class="form-group">
+                            <label for="dataType" class="col-md-4 control-label">数据类型</label>
+                            <div class="input-group col-sm-8">
+                                <select name="dataType" class="form-control" id="dataType">
+                                    <option value="1">电场强度</option>
+                                    <option value="2">预警信息</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-group col-md-3">
+                    <button  id="queryBtn" class="btn btn-default">查询</button>
+                    <button  id="exportBtn" class="btn btn-default" disabled="disabled"  >导出数据</button>
+                </div>
+            </div>
+            <c:if test="${obj.allDevicesSize <= 3}">
+                <div class="row query-row">
+                    <form action="" class="form-horizontal"  role="form">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-1 control-label" style="padding-top: 3px;">站名:</label>
+                            <div class="input-group col-md-11">
+                                <ul class="deviceIds-list">
+                                    <c:forEach var="device" items="${obj.allDevices}" varStatus="varStatus">
+                                        <li>
+                                            <input type="checkbox" name="deviceIds" value="${device.num}" id="deviceIds-${device.num}"/>
+                                            <label for="deviceIds-${device.num}">${device.deviceName}</label>
+                                        </li>
+                                    </c:forEach>
+                                    <li>
+                                        <input type="checkbox" name="deviceIds" value="n" id="deviceIds-n"/>
+                                        <label for="deviceIds-n">全部</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </c:if>
+            <c:if test="${obj.allDevicesSize > 3}">
+                <div class="row query-row selectrow">
+                    <div class="form-group col-md-12">
+                        <label class="col-md-1 control-label" style="padding-top: 3px;margin-left: -10px;text-align: right;">选择站</label>
+                        <div class="input-group col-md-11" style="">
+                            <table class="deviceIds-list">
+                                <tr>
+                                    <td>
+                                        <select name="deviceIds"  id="deviceIds" size="6"  multiple="multiple">
+
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-info btn-xs" style="width:100px;margin: 2px 5px;" onclick="leftMoveBtn()"><<----</button><br/>
+                                        <button type="button" class="btn btn-info btn-xs" style="width:100px;margin: 2px 5px;" onclick="leftAllMoveBtn()"><<====</button><br/>
+                                        <button type="button" class="btn btn-info btn-xs" style="width:100px;margin: 2px 5px;" onclick="rightMoveBtn()">---->></button><br/>
+                                        <button type="button" class="btn btn-info btn-xs" style="width:100px;margin: 2px 5px;" onclick="rightAllMoveBtn()">====>></button><br/>
+                                    </td>
+                                    <td> 
+                                        <select name="deviceIds-all" id="deivice-all"  size="6"  multiple="multiple">
+                                            <c:forEach var="device" items="${obj.allDevices}" varStatus="varStatus">
+                                                <option  value="${device.num}">${device.deviceName}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </td>
+                                    <td style="vertical-align:top;">
+                                        &nbsp;注:最多能选择10个站查询。
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </c:if>
+            <div class="row"   >
+                <%--  这里是画图  --%>
+                <div  id="container" style="min-width:370px;height:370px" ></div>
+            </div>
+            <div class="row" id="tablePane"  >
+                
+            </div>
+        </div>
+          <script type="text/javascript">
+               $(function () {
+                    $('#sel_search_orderstatus').multiselect();
+                });
+              </script>
+         <!-- 导出    -->
+            <script type="text/javascript">
+                $("#exportBtn").click(function () {
+                 var deviceIds= $("#deviceIds").val();
+                 var device=deviceIds.join();
+                 var url = "<%=request.getContextPath()%>/efdata/exportEFDatas";
+                var params={startTime: $("#startTime").val(), endTime: $("#endTime").val(),
+                                    dataType: $("#dataType").val(),deviceIds:device};
+                 downLoad(url,params,"post");
+                });
+                function downLoad(url, data, method){
+                    if( url && data ){ 
+                        // data 是 string 或者 array/object
+                        //data = typeof data == 'string' ? data : jQuery.param(data);
+                        // 把参数组装成 form的  input
+                        //var inputs = '';
+                        //jQuery.each(data.split('&'), function(){ 
+                        //    var pair = this.split('=');
+                        //    inputs+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />'; 
+                        //});
+                        var inputs = '';
+                        $.each(data, function(k, v){
+                            inputs+='<input type="hidden" name="'+ k +'" value="'+ v +'" />';
+                        })
+                        //
+                        // request发送请求
+                        //jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
+                       // .appendTo('body').submit().remove();
+                        jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
+                        .appendTo('body').submit().remove();
+                    };
+                };
+                
+              
+            </script>
+        <!-- 分页   -->
+            <script type="text/javascript">
+                     $("#tablePane").on("click","a",function(e){
+                         var a=e.target; 
+                         var pageNo =$(a).attr("data-pageNo"); 
+                         var totalCount =$(a).attr("data-totalCount"); 
+                         var deviceIds= $("#deviceIds").val();
+                            var device=deviceIds.join();
+                            $.ajax({
+                                async: false,
+                                type: "POST",
+                                data: {startTime: $("#startTime").val(), endTime: $("#endTime").val(),
+                                    dataType: $("#dataType").val(), deviceIds: device,pageNo:pageNo,totalCount:totalCount},
+                                url: "<%=request.getContextPath()%>/efdata/historyefdata-table",
+                                dataType: "html",
+                                processData: true,
+                                success: function (obj) {
+                                     $("#tablePane").html(obj);
+                                }
+                             });  
+                  });
+                  </script>
+        <script type="text/javascript">
+            $('.form_datetime').datetimepicker({
+                language: 'zh-CN',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                forceParse: 0,
+                showMeridian: 1
+            });
+        </script>
+        <!-- 图表显示   -->
+        <script type="text/javascript">
+            var xA = new Array();
+            var yA = new Array();
+            var markData = new Array();
+            var marker = new Array();
+            $("#queryBtn").click(function () {
+                var deviceIds= $("#deviceIds").val();
+                var device=deviceIds.join();
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    data: {startTime: $("#startTime").val(), endTime: $("#endTime").val(),
+                        dataType: $("#dataType").val(), deviceIds:device},
+                    url: "<%=request.getContextPath()%>/efdata/getefdatas",
+                    dataType: "json",
+                    processData: true,
+                    error: function (req, status, error) {
+
+                        if (status == "timeout") {
+
+                            alert("请求超时，请稍后再试!！");
+                            return;
+                        } else if (status === "error") {
+                            alert("数据请求失败，请稍后再试!如果还未解决，请联系管理员！");
+                            return;
+                        }
+                        return;
+                    },
+                    success: function (obj) {
+                        if(!obj ||obj.length==0){
+                          alert("查询数据为空");
+                          $("#exportBtn").attr("disabled","disabled");
+                          return;
+                        }  
+                         $("#exportBtn").removeAttr("disabled");
+                       var hcObj = [];
+                       $.each(obj, function (i, data) {
+                           var deviceData = {};
+                           deviceData.name = data.deviceId;
+                           deviceData.data = [];
+                           var datas = data.datas;
+                           for ( var i = 0; i < datas.length; i++) {
+                               var d = [];
+                               var time = datas[i].sendTime;
+                               var time = time.replace(/-/g, "/");
+                                time = time + " UTC";
+                                time = Date.parse(time);
+                               d.push(time, datas[i].value);
+                               deviceData.data.push(d);
+                            }
+                            hcObj.push(deviceData);
+                        });
+                        hight(hcObj);
+                        userList();
+                    }
+                });
+            });
+            function hight(hcObj) {
+                $('#container').highcharts({
+                    chart: {
+                        //plotBorderColor: "black", //图表的边框颜色
+                        plotBorderWidth: 0,
+                        type: 'spline'
+                    },
+                    credits:
+                            {
+                                enabled: false//不显示highCharts版权信息
+                            },
+                    title: {
+                        text: '大气场仪数据图'
+                    },
+                    xAxis: [{
+                            //gridLineWidth: 1, //纵向网格线宽度
+                             LineWidth: 1,
+                            lineColor: 'black',
+                            type: 'datetime',
+                            tickmarkPlacement: 'on',
+                            labels: {
+                                format: '{value:%H:%M}'
+                            }
+
+
+                        }, {// Top X axis
+                            linkedTo: 0,
+                            type: 'datetime',
+                            tickInterval: 24 * 3600 * 1000,
+                            labels: {
+                                format: '{value:<span style="font-size: 12px; font-weight: bold">%Y/%m/%e</span> }',
+                                align: 'center',
+                                x: 12,
+                                y: 5
+                            },
+                            lineWidth: 0,
+                            opposite: false,
+                            tickLength: 0,
+                            //gridLineWidth: 1
+
+                        }],
+                    yAxis: {
+                         lineWidth: 1,
+                         lineColor: 'black',
+                         //gridLineWidth: 1, //纵向网格线宽度
+                        title: {
+                            text: 'KV/s'
+                        }
+                    },
+//                    plotOptions: {
+//                        line: {
+//                            dataLabels: {
+//                                enabled: true          // 开启数据标签
+//                            }
+//                        }
+//                    },
+                    series: hcObj   
+                });
+            }
+            ;
+            function userList() {
+               var deviceIds= $("#deviceIds").val();
+                var device=deviceIds.join();
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    data: {startTime: $("#startTime").val(), endTime: $("#endTime").val(),
+                        dataType: $("#dataType").val(), deviceIds: device},
+                    url: "<%=request.getContextPath()%>/efdata/historyefdata-table",
+                    dataType: "html",
+                    processData: true,
+                    success: function (obj) {
+                         $("#tablePane").html(obj);
+                    }
+                });
+            }
+        </script>
+        <!---移动按钮 -->
+        <script type="text/javascript">
+            /**选中的元素向左移动**/
+            function leftMoveBtn()
+            {
+                //得到第一个select对象 
+                var selectElement = document.getElementById("deivice-all");
+                var optionElements = selectElement.getElementsByTagName("option");
+                var len = optionElements.length;
+
+                if (!(selectElement.selectedIndex == -1))  //如果没有选择元素，那么selectedIndex就为-1 
+                {
+
+                    //得到第二个select对象 
+                    var selectElement2 = document.getElementById("deviceIds");
+
+                    // 向右移动 
+                    for (var i = 0; i < len; i++)
+                    {
+                        selectElement2.appendChild(optionElements[selectElement.selectedIndex]);
+                    }
+                } else
+                {
+                    alert("您还没有选择需要移动的元素！");
+                }
+            }
+
+            //移动所有的到左边 
+            function leftAllMoveBtn()
+            {
+                //得到第一个select对象 
+                var selectElement = document.getElementById("deivice-all");
+                var optionElements = selectElement.getElementsByTagName("option");
+                var len = optionElements.length;
+                //alert(len); 
+
+                //将第一个selected中的数组翻转 
+                var firstOption = new Array();
+                for (var k = len - 1; k >= 0; k--)
+                {
+                    firstOption.push(optionElements[k]);
+
+                }
+                var lens = firstOption.length;
+                //得到第二个select对象 
+                var selectElement2 = document.getElementById("deviceIds");
+                for (var j = lens - 1; j >= 0; j--)
+                {
+                    selectElement2.appendChild(firstOption[j]);
+                }
+            }
+
+            //移动选中的元素到右边 
+            function rightMoveBtn()
+            {
+                //首先得到第二个select对象 
+                var selectElement = document.getElementById("deviceIds");
+                var optionElement = selectElement.getElementsByTagName("option");
+                var len = optionElement.length;
+
+                //再次得到第一个元素 
+                if (!(selectElement.selectedIndex == -1))
+                {
+                    var firstSelectElement = document.getElementById("deivice-all");
+                    for (i = 0; i < len; i++)
+                    {
+                        firstSelectElement.appendChild(optionElement[selectElement.selectedIndex]);//被选中的那个元素的索引 
+                    }
+                } else
+                {
+                    alert("您还没有选中要移动的项目!");
+                }
+            }
+            //全部向右移 
+            function rightAllMoveBtn()
+            {
+                var selectElement = document.getElementById("deviceIds");
+                var optionElements = selectElement.getElementsByTagName("option");
+                var len = optionElements.length;
+                var optionEls = new Array();
+                for (var i = len - 1; i >= 0; i--)
+                {
+                    optionEls.push(optionElements[i]);
+                }
+                var lens = optionEls.length;
+
+                var firstSelectElement = document.getElementById("deivice-all");
+                for (var j = lens - 1; j >= 0; j--)
+                {
+                    firstSelectElement.appendChild(optionEls[j]);
+                }
+            }
+        </script>
+    </body>
+</html>

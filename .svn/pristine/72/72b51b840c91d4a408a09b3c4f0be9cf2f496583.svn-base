@@ -1,0 +1,293 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.rasterdb.modules;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.log4j.LogManager;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.ViewModel;
+import org.nutz.mvc.annotation.AdaptBy;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.By;
+import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.filter.CheckSession;
+import org.nutz.mvc.upload.UploadAdaptor;
+import org.rasterdb.domain.EFDevice;
+import org.rasterdb.domain.User;
+import org.rasterdb.service.CityService;
+import org.rasterdb.service.device.Device;
+import org.rasterdb.service.device.DeviceManagerService;
+import org.rasterdb.service.device.DeviceQueryForm;
+import org.rasterdb.utils.Errors;
+import org.rasterdb.utils.HYPager;
+import org.rasterdb.utils.ProjectInfo;
+
+/**
+ *
+ * @author wuyiwei
+ */
+@IocBean
+@At("/deviceManager")
+@Filters(@By(type=CheckSession.class, args={"user", "/login.jsp"}))
+public class DeviceManagerModule {
+    
+    static final org.apache.log4j.Logger LOG = LogManager.getLogger(DeviceManagerService.class);
+    
+    private static final int DEFAULT_SHOW_PAGE_COUNT = 1; //HYPager.DEFAULT_SHOW_PAGE_COUNT;
+    
+    private static final int DEFAULT_PAGE_SIZE = 15;
+    
+    private static final String DEVICE_TMPL_FILE = "device-tmpl.xls";
+    
+    @Inject()
+    private DeviceManagerService deviceManagerService;
+    
+    @Inject
+    protected CityService cityService;
+    
+    @Inject
+    private ProjectInfo projectInfo;
+    
+    @At("/listInit")
+    @Ok("re")
+    public String listInit(ViewModel model) {
+        DeviceQueryForm queryForm = null;
+        
+        HYPager<DeviceQueryForm> pager = new HYPager<DeviceQueryForm>();
+        pager.setShowPageCount(DEFAULT_SHOW_PAGE_COUNT);
+        pager.setPageSize(DEFAULT_PAGE_SIZE);
+        pager.setQueryForm(queryForm);
+        
+        List<EFDevice> deviceList = deviceManagerService.queryWithPager(pager);
+        model.put("deviceList", deviceList);
+        model.put("pager", pager);
+        model.put("pagerString", HYPager.encode(pager));
+        
+        //allDevices(model);
+        cities(model);
+        
+        return "jsp:/device/device-list.jsp";
+    }
+    
+    @At("/searchInit")
+    @Ok("re")
+    public String searchInit(@Param("..") DeviceQueryForm queryForm, ViewModel model) {
+        HYPager<DeviceQueryForm> pager = new HYPager<DeviceQueryForm>();
+        pager.setShowPageCount(DEFAULT_SHOW_PAGE_COUNT);
+        pager.setPageSize(DEFAULT_PAGE_SIZE);
+        pager.setQueryForm(queryForm);
+        
+        List<EFDevice> deviceList = deviceManagerService.queryWithPager(pager);
+        model.put("deviceList", deviceList);
+        model.put("pager", pager);
+        model.put("pagerString", HYPager.encode(pager));
+        
+        //allDevices(model);
+        cities(model);
+        
+        return "jsp:/device/device-list.jsp";
+    }
+    
+    @At("/doList")
+    @Ok("re")
+    public String doList(@Param("pager") String pagerString,
+            @Param("pageNo") String pageNo, ViewModel model) {
+        HYPager pager = HYPager.decode(pagerString);
+        if (pager == null){
+            pager = new HYPager<DeviceQueryForm>();
+            pager.setShowPageCount(DEFAULT_SHOW_PAGE_COUNT);
+            pager.setPageSize(DEFAULT_PAGE_SIZE);
+        }
+        
+        int pageNoInt = NumberUtils.toInt(pageNo, -1);
+        if (pageNoInt != -1) {
+            pager.setPageNumber((pageNoInt <= 1 ? 1 : pageNoInt));
+        }
+        
+        List<EFDevice> deviceList = deviceManagerService.queryWithPager(pager);
+        model.put("deviceList", deviceList);
+        model.put("pager", pager);
+        model.put("pagerString", HYPager.encode(pager));
+        
+        //allDevices(model);
+        cities(model);
+        
+        return "jsp:/device/device-list.jsp";
+    }
+    
+    @At("/addInit")
+    @Ok("re")
+    public String addInit(@Param("pager") String pagerString, ViewModel model) {
+        EFDevice device = new EFDevice();
+        model.put("device", device);
+        model.put("pagerString", pagerString);
+        
+        //allDevices(model);
+        cities(model);
+        
+        return "jsp:/device/device-add.jsp";
+    }
+    
+    @At("/addSave")
+    @Ok("re")
+    public String addSave(@Param("..") Device device, @Param("pager") String pagerString, 
+            ViewModel model) {
+        Errors errors = validate(device);
+        
+        if (errors != null && !errors.isEmpty()) {
+            model.put("errors", errors);
+            model.put("device", device);
+            model.put("pagerString", pagerString);
+            
+            //allDevices(model);
+            cities(model);
+            
+           return "jsp:/device/device-add.jsp";
+        }
+        
+        EFDevice efDevice = Device.toEFDevice(device);
+        boolean exist = deviceManagerService.exist(efDevice);
+        if (exist) {
+            errors.put("num", "已经存在相同的站号了，请确认站号是否输入错误。");
+            model.put("errors", errors);
+            model.put("device", device);
+            model.put("pagerString", pagerString);
+            
+            //allDevices(model);
+            cities(model);
+            
+           return "jsp:/device/device-add.jsp";
+        }
+        
+        deviceManagerService.addDevice(efDevice);
+        HYPager pager = HYPager.decode(pagerString);
+        if (pager != null) {
+            pager.setTotalCount(-1);
+            pagerString = HYPager.encode(pager);
+        }
+        
+        return ">>:/deviceManager/doList?pager="+(pagerString == null ? "" : pagerString);
+    }
+    
+    @At("/editInit")
+    @Ok("re")
+    public String editInit(@Param("..") Device device, @Param("pager") String pagerString, ViewModel model) {
+        EFDevice dbDevice = deviceManagerService.getDevice(device.getNum());
+        model.put("device", dbDevice);
+        model.put("pagerString", pagerString);
+        
+        //allDevices(model);
+        cities(model);
+        
+        return "jsp:/device/device-edit.jsp";
+    }
+    
+    @At("/editSave")
+    @Ok("re")
+    public String editSave(@Param("..") Device device, @Param("pager") String pagerString, 
+            ViewModel model) {
+        Errors errors = validate(device);
+        
+        if (errors != null && !errors.isEmpty()) {
+            model.put("errors", errors);
+            model.put("device", device);
+            model.put("pagerString", pagerString);
+            
+            //allDevices(model);
+            cities(model);
+            
+           return "jsp:/device/device-edit.jsp";
+        }
+        
+        EFDevice efDevice = Device.toEFDevice(device);
+        deviceManagerService.updateDevice(efDevice);
+        return ">>:/deviceManager/doList?pager="+(pagerString == null ? "" : pagerString);
+    }
+    
+    @At("/delete")
+    @Ok("re")
+    public String deleteUser(@Param("..") EFDevice device, @Param("pager") String pagerString, 
+            ViewModel model) {
+        deviceManagerService.delete(device);
+        return ">>:/deviceManager/doList?pager="+(pagerString == null ? "" : pagerString);
+    }
+    
+    @At("/batchUploadInit")
+    @Ok("re")
+    public String batchUploadInit(@Param("pager") String pagerString, ViewModel model) {
+       model.put("pagerString", pagerString);
+       return "jsp:/device/batch-upload.jsp";
+    }
+    
+    @At("/batchUploadSave")
+    @Ok("re")
+    @AdaptBy(type = UploadAdaptor.class, args = { "${app.root}/upload" })
+    public String batchUploadSave(@Param("deviceFile") File deviceFile, 
+             @Param("pager") String pagerString, ViewModel model) {
+        Errors errors = new Errors();
+        List<EFDevice> devices = deviceManagerService.parseExcel(deviceFile, errors);
+        if (!errors.isEmpty()) {
+            model.put("errors", errors);
+            model.put("pagerString", pagerString);
+            
+            return "jsp:/device/batch-upload.jsp";
+        }
+        
+        deviceManagerService.batchAdd(devices);
+        return ">>:/deviceManager/doList?pager="+(pagerString == null ? "" : pagerString);
+    }
+    
+    @At("/downDeviceTmplFile")
+    public void downDeviceTmplFile(HttpServletRequest request, HttpServletResponse response) {
+        String deviceTmplFile = DEVICE_TMPL_FILE;
+        InputStream in = null;
+        try {
+            in = DeviceManagerService.class.getResourceAsStream(deviceTmplFile);
+            
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition","attachment; filename="+deviceTmplFile+"");  
+            ServletOutputStream out = response.getOutputStream();
+            IOUtils.copy(in, out);
+        } catch (IOException ex) {
+            LOG.error("下载设备的excel文件错误。", ex);
+        } finally {
+            if (in != null) {
+                IOUtils.closeQuietly(in);
+            }
+        }
+    }
+    
+     /**
+     * 获得地市，并添加到页面模型里。
+     * @param model 
+     */
+    private void cities(ViewModel model) {
+        List<ProjectInfo.XCity> cities = projectInfo.cities();
+        model.put("cities", cities);
+    }
+    
+     /**
+     * 验证用户提交的对象
+     * @param user
+     * @return 
+     */
+    private Errors validate(Device device) {
+        Errors errors = new Errors();
+        Device.validate(errors, device);
+        return errors;
+    }
+}

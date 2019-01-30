@@ -1,0 +1,58 @@
+div#map {
+    width: 100%;
+    height: 100%;
+    top: 26px;
+    position: absolute;
+}
+.leaflet-top {
+    top: 5px !important;
+}
+div#palyDiv {  z-index: 5;
+               position: absolute;
+               top: 23px;
+               left: 328px;
+               width: 433px;
+               height: 40px;
+               background-color: white;
+               border-radius: 10px;
+               overflow: hidden;
+}
+div#playIntDiv {
+    width: 161px;
+}
+input#startPaly {
+    width: 144px;
+}
+
+input#endPaly {
+    width: 144px;
+}
+.startPaly{
+    width: 220px;
+    height: 35px;
+    float: left;
+    margin-top: 4px;
+    margin-left: 15px;
+}
+.BtnPaly{
+    width: 51px;
+    height: 35px;
+    float: left;
+    margin-top: 4px;
+    margin-left: 15px;
+}
+input#playInt {
+    width: 70px;
+}
+
+div#playIntDiv {
+    width: 172px;
+}
+
+
+div#intervalDiv {
+    width: 160px;
+}
+input#interval {
+    width: 70px;
+}

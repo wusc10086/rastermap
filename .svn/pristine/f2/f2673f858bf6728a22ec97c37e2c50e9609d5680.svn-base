@@ -1,0 +1,90 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2017-7-19, 23:45:51
+    */
+#header {
+    top: 0;
+    left: 0;
+    height: 80px;
+    width: 100%;
+    position: absolute;
+    z-index: 9;
+    background: url(../images/x.png) repeat;
+}
+.menu{
+    height:52px; 
+    position:absolute; 
+    top:0;  
+    width:100%;
+    background: #0092DC;
+    filter:alpha(Opacity=80);
+    -moz-opacity:0.5;
+    opacity: 0.5;
+    margin-left: -10px;
+    margin-right: -10px;
+}
+.menu span{
+    color:#fff;
+    line-height:47px; 
+    background:url(../images/loginsj.png) no-repeat 21px 18px; 
+    text-indent:44px; color:#afc5d2; float:left;
+}
+.menu ul{
+    float:right; padding-right:30px;
+}
+.menu ul li{
+    float:left; margin-left:20px; 
+    line-height:47px;
+}
+.menu ul li a{
+    color:#afc5d2;
+}
+.menu ul li a:hover{
+    color:#fff;
+}
+.mainmap {
+    width: 100%;
+    height: 100%;
+    top: 52px;
+    position: absolute;
+    z-index: 5;
+    margin-left: -10px;
+    margin-right: -10px;
+    overflow:hidden;
+}
+.chart{
+    width: 100%;
+    height:30%;
+    bottom:20px;
+    z-index:999;
+    background: #fcf8e3;
+    position:absolute;
+    left:0;
+}
+.deviceselect{
+    z-index:1000;
+    width: 150px;
+    height: 30px;
+    top: 75%;
+    position:absolute;
+}
+.deviceLegend{
+    z-index:1000;
+    width: 160px;
+    height: 160px;
+    top: 62%;
+    right: 10px;
+    position:absolute;
+}
+div#map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+.leaflet-top {
+    top: 160px !important;
+}

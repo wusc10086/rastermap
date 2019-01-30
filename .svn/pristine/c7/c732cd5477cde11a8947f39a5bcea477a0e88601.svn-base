@@ -1,0 +1,141 @@
+<%@ page language="java" import="java.util.*" contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="org.rasterdb.domain.*" %>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">    
+    <title>用户列表</title>
+    <link rel="stylesheet" href="<c:url value='/js/bootstrap/css/bootstrap.min.css'/>"/>
+    <link rel="stylesheet" href="<c:url value='/css/common.css'/>"/>
+    <script src="<c:url value='/js/jquery-1.10.2.js'/>"></script>
+    <script src="<c:url value='/js/bootstrap/bootstrap.min.js'/>"></script>
+
+</head>
+<body style=" width:100%;">
+        <div class="page-title-breadcrumb">
+            <h5 class="title">用户列表</h5>
+        </div>
+       <div class="container-fluid">
+        <div class="row" style="padding: 8px 5px;">
+            <form class="form-inline" action="<c:url value='/userManager/searchInit'/>">
+                <div class="form-group">
+                    <label for="cityid">&nbsp;&nbsp;地市</label>
+                    <select name="cityid" class="form-control" id="cityid">
+                        <option value="">全部</option>
+                        <c:forEach var ="city" items="${obj.cities}">
+                            <option value="${city.cityid}" <c:if test="${city.cityid eq obj.pager.queryForm.cityid}">selected</c:if> >${city.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="userRealName">&nbsp;&nbsp;&nbsp;&nbsp;按姓名查询</label>
+                    <input type="text" name="userRealName" class="form-control" id="userRealName" value="${obj.pager.queryForm.userRealName}">
+                </div>
+                &nbsp;&nbsp;
+                <button type="submit" class="btn btn-default">查询</button>
+                <c:url var="addInit" value="/userManager/addInit">
+                    <c:param name="pager" value="${obj.pagerString}"/>
+                </c:url>
+                &nbsp;&nbsp;
+                <a class="btn btn-default" href="${addInit}" role="button">添加</a>
+            </form>
+        </div>
+        
+        <div class="row">
+            <table id="dataTable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>   
+                        <td style="width:60px;">序号</td>
+                        <td>姓名</td>
+			<td>登录名</td>
+			<td>角色权限</td>
+                        <td style="width:180px;"><b>操作</b></td>
+                    </tr>
+		</thead>
+		<tbody>
+                    <c:set var="disableStatus" value="<%= User.STATUS_DISABLE%>" />
+                    <c:forEach var="user" items="${obj.userList}" varStatus="status">
+                        <tr <c:if test="${user.status eq disableStatus}">class="del"</c:if> >
+                            <td>${status.index + 1}</td>
+                            <td>${user.userRealName}</td>
+                            <td>${user.username}</td>
+                            <td>${user.roles}</td>
+                            <td>
+                                <c:url var="editInitUrl" value="/userManager/editInit">
+                                    <c:param name="id" value="${user.id}"/>
+                                    <c:param name="username" value="${user.username}"/>
+                                    <c:param name="pager" value="${obj.pagerString}"/>
+                                </c:url>
+                                <a href="${editInitUrl}">编辑</a>
+                                |
+                                <c:url var="resetPasswdInitUrl" value="/userManager/resetPasswdInit">
+                                    <c:param name="id" value="${user.id}"/>
+                                    <c:param name="username" value="${user.username}"/>
+                                    <c:param name="pager" value="${obj.pagerString}"/>
+                                </c:url>
+                                <a href="${resetPasswdInitUrl}">修改密码</a>
+                                |
+                                <c:url var="deleteUrl" value="/userManager/delete">
+                                    <c:param name="id" value="${user.id}"/>
+                                    <c:param name="username" value="${user.username}"/>
+                                    <c:param name="pager" value="${obj.pagerString}"/>
+                                </c:url>
+                                <a href="${deleteUrl}" onclick="var b = window.confirm('您真的要删除此条记录吗？'); return b;">删除</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+		</tbody>
+                </table>
+        </div>
+                        
+       <div class="row" >
+            <ul id="pager" class="pagination center-block" style="margin: 0 auto; margin-top: 5px; width: 120px;">
+                <c:set var="startPageNumber" value="${obj.pager.startPageNumber}"/>
+                <c:set var="endPageNumber" value="${obj.pager.endPageNumber}"/>
+                <c:set var="showPageCount" value="${obj.pager.showPageCount}"/>
+                <c:set var="pageNumber" value="${obj.pager.pageNumber}"/>
+                <c:set var="pageSize" value="${obj.pager.pageSize}"/>
+                <c:set var="pageCount" value="${obj.pager.pageCount}"/>
+                <li <c:if test="${startPageNumber eq 1}">class="disabled"</c:if> >
+                    <c:url var="doListUrl" value="/userManager/doList">
+                            <c:param name="pageNo" value="${startPageNumber - pageSize}"/>
+                            <c:param name="pager" value="${obj.pagerString}"/>
+                    </c:url>
+                    <a href="${doListUrl}" aria-label="Previous" <c:if test="${startPageNumber eq 1}">onclick="return false;"</c:if> >
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <c:forEach var="curPageNo" begin="${startPageNumber}" end="${endPageNumber}" varStatus="status">
+                    <li <c:if test="${pageNumber eq curPageNo}">class="active"</c:if> >
+                        <c:url var="doListUrl" value="/userManager/doList">
+                            <c:param name="pageNo" value="${curPageNo}"/>
+                            <c:param name="pager" value="${obj.pagerString}"/>
+                        </c:url>
+                        <a href="${doListUrl}">${curPageNo}</a>
+                    </li>
+                </c:forEach>
+                <li <c:if test="${endPageNumber eq pageCount}">class="disabled"</c:if> >
+                    <c:url var="doListUrl" value="/userManager/doList">
+                            <c:param name="pageNo" value="${endPageNumber + 1}"/>
+                            <c:param name="pager" value="${obj.pagerString}"/>
+                    </c:url>
+                    <a href="${doListUrl}" aria-label="Next" <c:if test="${endPageNumber eq pageCount}">onclick="return false;"</c:if>>
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>  
+        </div>
+
+    </div>
+
+  </body>
+</html>

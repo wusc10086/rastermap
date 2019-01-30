@@ -1,0 +1,55 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.rasterdb.modules.rtalarm;
+
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.ViewModel;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Ok;
+import org.rasterdb.service.sysparam.SysParam;
+import org.rasterdb.service.sysparam.SysParamService;
+import org.rasterdb.service.user.UserManagerService;
+
+/**
+ *
+ * @author wuyiwei
+ */
+@IocBean
+@At("/rtalarm")
+public class RTAlarmModule {
+    
+    @Inject()
+    private SysParamService sysParamService;
+    
+    @At("/rtalarm")
+    @Ok("re")
+    public String alarm(ViewModel model) {
+        
+        SysParam p = sysParamService.getByParamName("geo_center_lng");
+        String centerLng = p.getParamValue();
+        p = sysParamService.getByParamName("geo_center_lat");
+        String centerLat = p.getParamValue();
+        p = sysParamService.getByParamName("geo_map_zoom");
+        String mapZoom = p.getParamValue();
+        p = sysParamService.getByParamName("geo_map_minzoom");
+        String mapMinZoom = p.getParamValue();
+        p = sysParamService.getByParamName("geo_map_maxzoom");
+        String mapMaxZoom = p.getParamValue();
+        p = sysParamService.getByParamName("device_warningdata_zoom_pointsize");
+        String zoomAndSymboSize = p.getParamValue();
+        
+        model.put("centerLng", centerLng);
+        model.put("centerLat", centerLat);
+        model.put("mapZoom", mapZoom);
+        model.put("mapMinZoom", mapMinZoom);
+        model.put("mapMaxZoom", mapMaxZoom);
+        model.put("zoomAndSymboSize", zoomAndSymboSize);
+        
+        return "jsp:/rtalarm/rtalarm.jsp";
+    }
+    
+}

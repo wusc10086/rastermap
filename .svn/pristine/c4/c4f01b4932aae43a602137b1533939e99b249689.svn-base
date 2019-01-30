@@ -1,0 +1,144 @@
+<%-- 
+    Document   : user-addjsp
+    Created on : 2017-7-29, 10:30:18
+    Author     : wuyiwei
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="org.rasterdb.domain.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">    
+    <title>修改用户信息</title>
+    <link rel="stylesheet" href="<c:url value='/js/bootstrap/css/bootstrap.min.css'/>"/>
+    <link rel="stylesheet" href="<c:url value='/css/common.css'/>"/>
+    <script src="<c:url value='/js/jquery-1.10.2.js'/>"></script>
+    <script src="<c:url value='/js/bootstrap/bootstrap.min.js'/>"></script>
+</head>
+<body style=" width:100%;">
+        <div class="page-title-breadcrumb">
+            <h5 class="title">修改用户信息</h5>
+        </div>
+       <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+            <div class="col-lg-10">
+                <form id="form" class="form-horizontal" action="<c:url value='/userManager/editSave'/>">
+                <input type="hidden" name="pager" value="${obj.pagerString}"/>
+                <input type="hidden" name="id" value="${obj.user.id}"/>
+                <input type="hidden" name="username" value="${obj.user.username}"/>
+                <div class="form-group">
+                    <c:if test="${ not empty obj.errors.userRealName }">
+                        <c:set var="userRealNameError" value="field-error"/>
+                    </c:if>
+                    <label for="userRealName" class="col-sm-3 control-label">姓名</label>
+                    <div class="col-sm-9">
+                        <input name="userRealName" class="form-control ${userRealNameError}" id="userRealName" value="${obj.user.userRealName}" placeholder="用户真实姓名">
+                        <span>${obj.errors.userRealName}</span>
+                    </div>
+                </div>
+                <%-- 
+                <div class="form-group">
+                    <c:if test="${ not empty obj.errors.username }">
+                        <c:set var="usernameError" value="field-error"/>
+                    </c:if>
+                    <label for="username" class="col-sm-2 control-label">用户登录名</label>
+                    <div class="col-sm-10">
+                        <input name="username" class="form-control ${usernameError}" id="username" value="${obj.user.username}" placeholder="用户登录名">
+                        <span>${obj.errors.username}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <c:if test="${ not empty obj.errors.passwd }">
+                        <c:set var="passwdError" value="field-error"/>
+                    </c:if>
+                    <label for="passwd" class="col-sm-2 control-label">用户密码</label>
+                    <div class="col-sm-10">
+                        <input name="passwd" class="form-control ${passwdError}" id="passwd" placeholder="用户登录密码">
+                        <span>${obj.errors.passwd}</span>
+                    </div>
+                </div>
+                --%>
+                <div class="form-group">
+                    <c:if test="${ not empty obj.errors.roles }">
+                        <c:set var="rolesError" value="field-error"/>
+                    </c:if>
+                    <label for="roles" class="col-sm-3 control-label">角色权限</label>
+                    <div class="col-sm-9 ${rolesError}">
+                        <c:set var="commUserRole" value="<%=User.USER_ROLE_COMM_USER %>"/>
+                        <c:set var="adminRole" value="<%=User.USER_ROLE_ADMIN %>"/>
+                        <select name="roles" class="form-control ${rolesError}" id="roles">
+                            <option value="">请选择</option>
+                            <option value="${commUserRole}" <c:if test="${commUserRole eq obj.user.roles}">selected</c:if> >${commUserRole}</option>
+                            <option value="${adminRole}" <c:if test="${adminRole eq obj.user.roles}">selected</c:if> >${adminRole}</option>
+                        </select>
+                        <span>${obj.errors.roles}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <c:if test="${ not empty obj.errors.cityid }">
+                        <c:set var="cityidError" value="field-error"/>
+                    </c:if>
+                    <label for="cityid" class="col-sm-3 control-label">地市</label>
+                    <div class="col-sm-9">
+                        <select name="cityid" class="form-control ${cityidError}" id="cityid">
+                            <option value="">请选择</option>
+                        <c:forEach var ="city" items="${obj.cities}">
+                            <option value="${city.cityid}" <c:if test="${city.cityid eq obj.user.cityid}">selected</c:if> >${city.name}</option>
+                        </c:forEach>
+                        </select>
+                        <span>${obj.errors.cityid}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <c:if test="${ not empty obj.errors.status }">
+                        <c:set var="statusError" value="field-error"/>
+                    </c:if>
+                    <label for="status" class="col-sm-3 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <c:set var="normalStatus" value="<%=User.STATUS_NORMAL %>"/>
+                        <c:set var="disableStatus" value="<%=User.STATUS_DISABLE %>"/>
+                        <select name="status" class="form-control ${statusError}" id="status">
+                            <option value="-1">请选择</option>
+                            <option value="${normalStatus}" <c:if test="${normalStatus eq obj.user.status}">selected</c:if> >正常</option>
+                            <option value="${disableStatus}" <c:if test="${disableStatus eq obj.user.status}">selected</c:if> >停用</option>
+                        </select>
+                        <span>${obj.errors.status}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button type="reset" class="btn btn-default">重置</button>
+                        <c:url var="doListUrl" value="/userManager/doList">
+                            <c:param name="pager" value="${obj.pagerString}"/>
+                        </c:url>
+                        <a class="btn btn-default" href="${doListUrl}" role="button">返回列表页</a>
+                    </div>
+                </div>
+            </form>
+            </div>
+            <div class="col-lg-2"></div>
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+    </div>
+                    
+    <script>
+       $("button[type='reset']").on('click', function(){
+            $('div.form-group > div > span').hide(); 
+            $('div.form-group').find(".field-error").removeClass("field-error"); 
+            return true;
+       });         
+     
+    </script>
+</body>
+</html>
